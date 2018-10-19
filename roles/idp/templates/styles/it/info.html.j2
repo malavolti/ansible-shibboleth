@@ -23,7 +23,7 @@
          <div class='row'>
             <div class="col-md-2"><a href="{{ idp_metadata['it']['org_url'] }}"><img id="headerLogo" src="{{ idp_metadata['it']['mdui_logo'] }}"/></a></div>
             <div class="col-md-8 text-center">
-               <h2>PARTECIPAZIONE AL PROGETTO IDEM GARR:<br/>IDP IN THE CLOUD<br/></h2>
+               <h2>IDP Unipi:<br/>Autenticazione Single Sign On e IDEM GARR<br/></h2>
                <br/>
                <p class="text-center">
 {% for lang, value in idp_metadata.iteritems() %}
@@ -55,21 +55,18 @@
             <h3>ACCEPTABLE USE POLICY - AUP</h3>
             <p><a href="https://www.garr.it/it/regole-di-utilizzo-della-rete-aup">Regole di utilizzo della rete - AUP</a></p>
 
-            <h3>ATTIVAZIONE E GESTIONE ACCOUNT:</h3>
-            <a href="/flup">Gestisci il tuo account</a> (<a href="https://wiki.idem.garrservices.it/wiki/index.php/MINSAL:IdpInTheCloudFlupManual">GUIDA</a>)
-
             <h3>GUIDA ALL'ACCESSO DELLE RISORSE FEDERATE:</h3>
             <a href="https://wiki.idem.garrservices.it/wiki/index.php/MINSAL:IdpInTheCloudHowToAccessFederatedResources">Guida all'accesso delle risorse federate IDEM ed eduGAIN</a>
 
             <h3> SUPPORTO UTENTE PER CREDENZIALI, RILASCIO ATTRIBUTI, ... </h3>
             <p> Nome Cognome: {{ idp_contacts['support']['givenName'] }} {{ idp_contacts['support']['surName'] }}</p>
             <p> e-mail: <a href="mailto:{{ idp_contacts['support']['mail'] }}">Supporto Utenti</a></p>
-            <p> tel.:</p>
+            <p> tel.: {{ idp_contacts['support']['tel']}}</p>
 
             <h3> REFERENTE TECNICO PER L'IDENTITY PROVIDER: </h3>
             <p> Nome Cognome: {{ idp_contacts['technical']['givenName'] }} {{ idp_contacts['technical']['surName'] }}</p>
             <p> e-mail: <a href="mailto:{{ idp_contacts['technical']['mail'] }}">Contatto Tecnico</a></p>
-            <p> tel.:</p>
+            <p> tel.: {{ idp_contacts['technical']['tel']}}</p>
 
             <h3> INFORMAZIONI SUL RILASCIO DEGLI ATTRIBUTI UTENTE AI FORNITORI DI RISORSE:</h3>
             <p>{{ idp_metadata['it']['mdui_displayName'] }} mediante questo Identity Provider può trasmettere alla Risorsa a cui Lei chiede di accedere alcune informazioni (attributi) su di Lei, su richiesta della Risorsa stessa.<br />
