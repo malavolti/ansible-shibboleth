@@ -9,7 +9,7 @@
 
 - name: "Include jetty default variables"
   include_vars:
-    file: "java{{ java_version['stdout'] }}_jetty_vars.yml"
+    file: "java{{ java_version.stdout }}_jetty_vars.yml"
   when: jetty_distribution is undefined or jetty_distribution == ""
   tags: jetty 
 
@@ -28,7 +28,7 @@
 
 - name: "Extract Jetty Package"
   unarchive:
-   src: "files/{{ ansible_os_family }}/java{{ java_version['stdout'] }}/{{ jetty_distribution }}.tar.gz"
+   src: "files/{{ ansible_os_family }}/java{{ java_version.stdout }}/{{ jetty_distribution }}.tar.gz"
    dest: "/usr/local/src"
    owner: "jetty"
    group: "jetty"
@@ -82,9 +82,9 @@
    owner: "jetty"
    group: "jetty"
   with_items:
-   - { src: "files/{{ ansible_os_family }}/java{{ java_version['stdout'] }}/jetty", dest: '/etc/default/jetty' }
-   - { src: "files/{{ ansible_os_family }}/java{{ java_version['stdout'] }}/start.ini", dest: '/opt/jetty/start.ini' }
-   - { src: "files/{{ ansible_os_family }}/java{{ java_version['stdout'] }}/jetty.xml", dest: '/opt/jetty/etc/jetty.xml' }
+   - { src: "files/{{ ansible_os_family }}/java{{ java_version.stdout }}/jetty", dest: '/etc/default/jetty' }
+   - { src: "files/{{ ansible_os_family }}/java{{ java_version.stdout }}/start.ini", dest: '/opt/jetty/start.ini' }
+   - { src: "files/{{ ansible_os_family }}/java{{ java_version.stdout }}/jetty.xml", dest: '/opt/jetty/etc/jetty.xml' }
   tags: jetty
 
 - name: "Stop jetty after an upgrade of its package"
