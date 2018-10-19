@@ -1,6 +1,6 @@
 # Overridden default properties
 
-idp.logo={{ idp_metadata['en']['mdui_logo'] }}
+idp.logo=/..{{ idp_metadata['en']['mdui_logo'] | urlsplit('path') }}
 idp.logo.alt-text={{ idp_metadata['en']['org_displayName'] }}
 idp.footer={{ idp_login['footer']['en']['text'] }}
 idp.url.helpdesk=mailto:{{ idp_contacts['support']['mail'] }}

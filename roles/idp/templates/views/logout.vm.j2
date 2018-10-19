@@ -31,16 +31,14 @@
     <div class="wrapper">
       <div class="container">
         <header>
-          <img src="#springMessageText("idp.logo","$request.getContextPath()/idp/images/dummylogo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")">
+          <img src="$request.getContextPath()#springMessage("idp.logo")" alt="#springMessageText("idp.logo.alt-text", "logo")">
         </header>
 
         <div class="content">
           <div class="column one">
-            <p>This page is displayed when a logout operation at the Identity Provider completes. This page is an example
-            and should be customized. It is not fully internationalized because the presentation will be a highly localized
-            decision, and we don't have a good suggestion for a default.</p>
+            <p>Logout operation at the Identity Provider.</p>
             <br>
-
+    
             #if ( $logoutContext and !$logoutContext.getSessionMap().isEmpty() )
                 <p>#springMessageText("idp.logout.ask", "Would you like to attempt to log out of all services accessed during your session? Please select <strong>Yes</strong> or <strong>No</strong> to ensure the logout operation completes, or wait a few seconds for Yes.")</p>
                 <br>
@@ -87,6 +85,6 @@
         </div>
       </footer>
     </div>
-
-        </body>
+    
+ 	</body>
 </html>
