@@ -78,7 +78,11 @@ idp.encryption.cert= %{idp.home}/credentials/idp-encryption.crt
 
 # Set to "shibboleth.StorageService" for server-side storage of user sessions
 #idp.session.StorageService = shibboleth.ClientSessionStorageService
-idp.session.StorageService = shibboleth.JPAStorageService 
+{% if idp_config['storage_memcache_hosts'] is defined -%} 
+idp.session.StorageService = shibboleth.MemcachedStorageService
+{% else %}
+idp.session.StorageService = shibboleth.JPAStorageService
+{% endif %}
 
 # Size of session IDs
 #idp.session.idSize = 32
@@ -157,7 +161,12 @@ idp.logout.elaboration = true
 
 # Set to custom bean for alternate storage of replay cache
 #idp.replayCache.StorageService = shibboleth.StorageService
+{% if idp_config['storage_memcache_hosts'] is defined -%} 
+idp.replayCache.StorageService = shibboleth.MemcachedStorageService
+{% else %}
 idp.replayCache.StorageService = shibboleth.JPAStorageService
+{% endif %}
+
 
 # Toggles whether to allow outbound messages via SAML artifact
 #idp.artifact.enabled = true
@@ -167,7 +176,12 @@ idp.replayCache.StorageService = shibboleth.JPAStorageService
 #idp.artifact.endpointIndex = 2
 # Set to custom bean for alternate storage of artifact map state
 #idp.artifact.StorageService = shibboleth.StorageService
+{% if idp_config['storage_memcache_hosts'] is defined -%} 
+idp.artifact.StorageService = shibboleth.MemcachedStorageService
+{% else %}
 idp.artifact.StorageService = shibboleth.JPAStorageService 
+{% endif %}
+
 
 # Name of access control policy for various admin flows
 idp.status.accessPolicy= AccessByIPAddress
