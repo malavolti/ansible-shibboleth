@@ -657,6 +657,7 @@
 - name: "Remove fake RS SP Metadata from the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-rs-sp.xml"
+   state: "absent"
   when:
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["No","no","False","false"]
@@ -664,6 +665,7 @@
 - name: "Remove fake CoCo SP Metadata in the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-coco-sp.xml"
+   state: "absent"
   when:
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["No","no","False","false"]
