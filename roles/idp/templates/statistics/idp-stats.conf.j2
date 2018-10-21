@@ -2,5 +2,5 @@ Alias /statistics /var/www/html/statistics
 
 <Directory /var/www/statistics>
         DirectoryIndex index.php
-        Require all granted
+        Require {{ idp_stats['require_acl'] | default('all granted') }}
 </Directory>
