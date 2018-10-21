@@ -41,7 +41,7 @@
    mode: "0600"
 
 - name: "Store in the 'shib_db' ansible variable the result of the check on the existance of the 'shibboleth' database"
-  command: mysql -u root -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='shibboleth'"
+  command: mysql -h {{ idp_config['shibboleth_db_host'] }} -u shibboleth -p{{ idp_config['shibboleth_db_password'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='shibboleth'"
   register: shib_db
   changed_when: false
 
