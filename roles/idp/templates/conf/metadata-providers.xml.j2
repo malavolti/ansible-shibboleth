@@ -38,13 +38,17 @@
     -->
 
 {% for md in idp_metadata_providers %}    
+{% if md['url'] is defined %}
     <MetadataProvider
       id="{{ md['id'] }}"
       xsi:type="FileBackedHTTPMetadataProvider"
+{% if http_proxy_host is defined %}
+      proxyHost="{{ http_proxy_host }}"
+      proxyPort="{{ http_proxy_port }}"
+{% endif %}
       backingFile="%{idp.home}/metadata/{{ md['file'] }}"
       metadataURL="{{ md['url'] }}"
       disregardTLSCertificate="{{ md['disregardTLSCertificate'] }}">
-
 {% if md['pubKey'] is defined %}
       <!--
           Verify the signature on the root element of the metadata aggregate
@@ -69,6 +73,13 @@
         <RetainedRole>md:SPSSODescriptor</RetainedRole>
       </MetadataFilter>
     </MetadataProvider>
+{% else %}
+{% if md['comment'] is defined %}
+      <!-- {{ md['comment'] }} -->
+{% endif %}
+    <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
+
+{% endif %}
 {% endfor %}
 
     <!--

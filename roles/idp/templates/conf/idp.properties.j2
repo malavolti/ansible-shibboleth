@@ -212,3 +212,12 @@ idp.fticks.algorithm={{ idp_config['fticks']['alg'] }}
 idp.fticks.salt={{ idp_config['fticks']['salt'] }}
 idp.fticks.loghost={{ idp_config['fticks']['loghost'] }}
 idp.fticks.logport={{ idp_config['fticks']['logport'] }}
+
+{% if http_proxy_host is defined %}
+# Http Proxy
+idp.http.proxyhost="{{ http_proxy_host }}"
+idp.http.proxyport="{{ http_proxy_port }}"
+{% endif %}
+
+
+

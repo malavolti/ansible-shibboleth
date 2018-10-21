@@ -713,6 +713,16 @@
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
 
+- name: "Upload Custom Metadata files"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idp/metadata/{{ item.file }}"
+   dest: "/opt/shibboleth-idp/metadata/{{ item.file }}"
+   owner: "jetty"
+   group: "root"
+   mode: "0644"
+  when: item.url is not defined
+  with_items: "{{ idp_metadata_providers }}"
+
 - name: "Download Federation's Metadata files"
   get_url:
    url: "{{ item.url }}"
@@ -721,6 +731,7 @@
    group: "root"
    mode: "0644"
    validate_certs: "{{ item.disregardTLSCertificate }}"
+  when: item.url is defined
   with_items: "{{ idp_metadata_providers }}"
 
 # Jetty IdP Configuration
