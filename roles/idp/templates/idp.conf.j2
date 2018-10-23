@@ -10,7 +10,11 @@
 
 #    RedirectMatch ^/$ {{ idp_metadata['en']['mdui_infoUrl'] }}
     <If " %{REQUEST_URI} == '\/' && %{HTTP:Accept-Language} =~ /^it/">
-        RedirectMatch ^/$ https://{{ fqdn }}/it/info.html
+        RedirectMatch ^/$ {{ idp_metadata['it']['mdui_infoUrl'] }}
     </If>
+    <Else>
+        RedirectMatch ^/$ {{ idp_metadata['en']['mdui_infoUrl'] }}
+    </Else>
+
 
 </IfModule>
