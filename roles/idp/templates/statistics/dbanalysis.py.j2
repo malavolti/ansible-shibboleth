@@ -58,7 +58,7 @@ def parseFiles(files):
   {% endif %}
  {% endif %}
 {% endif %}
-        except ValueError:
+       except ValueError:
             print """ERROR: Unsupported log file format or using compressed log files with Python < 2.5.%s. See the documentation in the Shibboleth wiki.""" % os.linesep
             sys.exit(-1)
 
