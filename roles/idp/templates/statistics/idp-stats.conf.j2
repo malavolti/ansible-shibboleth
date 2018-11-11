@@ -2,5 +2,9 @@ Alias /statistics /var/www/html/statistics
 
 <Directory /var/www/statistics>
         DirectoryIndex index.php
-        Require {{ idp_stats['require_acl'] | default('all granted') }}
+        {% if ip_access_control['webstats'] is defined %}
+        Require ip {{ ip_access_control['webstats'] | join(' ') }}
+        {% else %}
+        Require all granted
+        {% endif %}
 </Directory>

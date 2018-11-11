@@ -746,3 +746,14 @@
    owner: "root"
    group: "root"
    mode: 0644
+
+# IP access control to status page. Required by haproxy
+- name: "Shibboleth Status access control "
+  lineinfile:
+    path: "/opt/shibboleth-idp/conf/access-control.xml"
+    regexp: "p:allowedRanges="
+    line: "p:allowedRanges=\"#{ {'127.0.0.1/32', '::1/128', '{{ ip_access_control['idpstatus'] |  join(\"', '\") }}'} }\" />"
+  when: ip_access_control['idpstatus']
+  notify:
+   - "Reload Access Control"
+  tags: temp
