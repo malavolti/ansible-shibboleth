@@ -42,3 +42,10 @@
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
+
+- name: "Reload Access Control"
+  shell: "./reload-service.sh -id shibboleth.ReloadableAccessControlService"
+  args:
+    chdir: "/opt/shibboleth-idp/bin"
+  environment:
+    JAVA_HOME: "{{ java_home_dir }}"
