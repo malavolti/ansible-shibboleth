@@ -753,7 +753,7 @@
     path: "/opt/shibboleth-idp/conf/access-control.xml"
     regexp: "p:allowedRanges="
     line: "p:allowedRanges=\"#{ {'127.0.0.1/32', '::1/128', '{{ ip_access_control['idpstatus'] |  join(\"', '\") }}'} }\" />"
-  when: ip_access_control['idpstatus']
+  when: ip_access_control is defined and ip_access_control['idpstatus']
   notify:
    - "Reload Access Control"
   tags: temp
