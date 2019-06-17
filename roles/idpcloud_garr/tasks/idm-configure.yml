@@ -147,8 +147,14 @@
    - { line: "" }
    - { line: "Nuovi utenti per {{ ldap['org'] }}:" }
 
-- name: "Be sure to have an Hard Link for 'updates.txt' file"
+- name: "Check if 'updates.txt' file is missing"
+  stat:
+   path: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
+  register: updates_txt
+
+- name: "Be sure to create an Hard Link of 'updates.txt' under phpldapadmin dir if missing"
   file:
    src: "/var/local/backups/updates.txt"
    dest: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
    state: hard
+  when: updates_txt.stat.exists == False
