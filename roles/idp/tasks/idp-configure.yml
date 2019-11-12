@@ -657,6 +657,7 @@
 - name: "Remove fake RS SP Metadata from the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-rs-sp.xml"
+   state: absent
   when:
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["No","no","False","false"]
@@ -664,6 +665,7 @@
 - name: "Remove fake CoCo SP Metadata in the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-coco-sp.xml"
+   state: absent
   when:
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["No","no","False","false"]
@@ -722,6 +724,7 @@
    mode: "0644"
    validate_certs: "{{ item.disregardTLSCertificate }}"
   with_items: "{{ idp_metadata_providers }}"
+  when: item['url'] is defined
 
 # Jetty IdP Configuration
 - name: "Configure Jetty to load the IdP war file"
@@ -731,3 +734,23 @@
    owner: "root"
    group: "root"
    mode: 0644
+
+- name: "Upload Custom Metadata files"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idp/metadata/{{ item.file }}"
+   dest: "/opt/shibboleth-idp/metadata/{{ item.file }}"
+   owner: "jetty"
+   group: "root"
+   mode: "0644"
+  when: item['url'] is not defined
+  with_items: "{{ idp_metadata_providers }}"
+
+# IP access control to status page. Required by haproxy
+- name: "Shibboleth Status access control "
+  lineinfile:
+    path: "/opt/shibboleth-idp/conf/access-control.xml"
+    regexp: "p:allowedRanges="
+    line: "p:allowedRanges=\"#{ {'127.0.0.1/32', '::1/128', '{{ ip_access_control['idpstatus'] |  join(\"', '\") }}'} }\" />"
+  when: ip_access_control is defined and ip_access_control['idpstatus']
+  notify:
+   - "Reload Access Control"
