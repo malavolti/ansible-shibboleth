@@ -62,6 +62,33 @@
           p:validationQuery="select 1"
           p:validationQueryTimeout="5" />
 
+{% if idp_config['storage_memcache_hosts'] %}
+    <bean id="shibboleth.JPAStorageService.JPAVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		   <property name="database" value="MYSQL" />
+	  </bean>
+
+	  <bean id="shibboleth.MemcachedStorageService"
+		      class="org.opensaml.storage.impl.memcached.MemcachedStorageService"
+		      c:timeout="2">
+	      
+          <constructor-arg name="client">
+             <bean class="net.spy.memcached.spring.MemcachedClientFactoryBean"
+                   p:servers="{{ idp_config['storage_memcache_hosts'] }}"
+                   p:protocol="BINARY"
+                   p:locatorType="CONSISTENT"
+                   p:failureMode="Redistribute">
+               <property name="hashAlg">
+                 <util:constant static-field="net.spy.memcached.DefaultHashAlgorithm.FNV1_64_HASH" />
+               </property>
+               <property name="transcoder">
+                 <!-- DO NOT MODIFY THIS PROPERTY -->
+                 <bean class="org.opensaml.storage.impl.memcached.StorageRecordTranscoder" />
+               </property>
+             </bean>
+	        </constructor-arg>
+	  </bean>
+{% endif %}
+
     <bean id="shibboleth.JPAStorageService" class="org.opensaml.storage.impl.JPAStorageService"
           p:cleanupInterval="%{idp.storage.cleanupInterval:PT10M}"
           c:factory-ref="shibboleth.JPAStorageService.entityManagerFactory"/>
