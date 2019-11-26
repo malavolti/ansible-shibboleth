@@ -41,6 +41,10 @@
     <MetadataProvider
       id="{{ md['id'] }}"
       xsi:type="FileBackedHTTPMetadataProvider"
+{% if http_proxy_host is defined %}
+      proxyHost="{{ http_proxy_host }}"
+      proxyPort="{{ http_proxy_port }}"
+{% endif %}
       backingFile="%{idp.home}/metadata/{{ md['file'] }}"
       metadataURL="{{ md['url'] }}"
       disregardTLSCertificate="{{ md['disregardTLSCertificate'] }}">
@@ -68,6 +72,13 @@
       <MetadataFilter xsi:type="EntityRoleWhiteList">
         <RetainedRole>md:SPSSODescriptor</RetainedRole>
       </MetadataFilter>
+{% else %}
+{% if md['comment'] is defined %}
+	      <!-- {{ md['comment'] }} -->
+{% endif %}
+	    <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
+
+{% endif %}
     </MetadataProvider>
 {% endfor %}
 
