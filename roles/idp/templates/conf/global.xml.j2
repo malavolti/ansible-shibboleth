@@ -62,7 +62,7 @@
           p:validationQuery="select 1"
           p:validationQueryTimeout="5" />
 
-{% if idp_config['storage_memcache_hosts'] %}
+{% if idp_config['storage_memcache_hosts'] is defined and (storage_memcache_hosts|length > 0)%}
     <bean id="shibboleth.JPAStorageService.JPAVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		   <property name="database" value="MYSQL" />
 	  </bean>
