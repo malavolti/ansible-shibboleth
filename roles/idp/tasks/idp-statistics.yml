@@ -22,7 +22,7 @@
    - ansible_distribution_release == "stretch"
 
 - name: "Check if 'statistics' DB is already created and store the result into 'statistics_db' ansible variable"
-  command: mysql -h {{ idp_config['shibboleth_db_host'] }} -u statistics -p{{ idp_stats['db_pw'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='statistics'"
+  command: mysql -h {{ idp_stats['db_host'] }} -u statistics -p{{ idp_stats['db_pw'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='statistics'"
   register: statistics_db
   changed_when: false
 
