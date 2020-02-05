@@ -14,3 +14,38 @@ idp_login_default:
    aupUrl: "https://www.garr.it/en/acceptable-use-policies"
   it:
    aupUrl: "https://www.garr.it/it/regole-di-utilizzo-della-rete-aup"
+
+idp_metadata:
+ en:
+  mdui_displayName: "ENG IdP DisplayName"
+  mdui_description: "ENG IdP Description"
+  mdui_infoUrl: "https://{{ fqdn }}/en/info.html"
+  mdui_privacyUrl: "https://{{ fqdn }}/en/privacy.html"
+  mdui_favicon: "https://{{ fqdn }}/en/favicon.png"
+  mdui_logo: "https://{{ fqdn }}/en/logo.png"
+  org_name: "ENG Organization Name"
+  org_displayName: "ENG Organization DisplayName"
+  org_url: "https://www.organization.org/en"
+ it:
+  mdui_displayName: "ITA IdP DisplayName"
+  mdui_description: "ITA IdP Description"
+  mdui_infoUrl: "https://{{ fqdn }}/it/info.html"
+  mdui_privacyUrl: "https://{{ fqdn }}/it/privacy.html"
+  mdui_favicon: "https://{{ fqdn }}/it/favicon.png"
+  mdui_logo: "https://{{ fqdn }}/it/logo.png"
+  org_name: "ITA Organization Name"
+  org_displayName: "ITA Organization DisplayName"
+  org_url: "https://www.organization.org/it"
+
+
+idp_contacts:
+ technical:
+  givenName: "Example Technical"
+  surName: "User"
+  mail: "technical.user@example.org"
+ support:
+  givenName: "Example Support"
+  surName: "User"
+  mail: "support.user@example.org"
+  address: "Example Address 32, Milan, Italy"
+  telephone: "+393249582321"

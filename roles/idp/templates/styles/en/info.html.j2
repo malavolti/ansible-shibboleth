@@ -26,7 +26,7 @@
                <h2>PARTICIPATION TO THE IDEM GARR PROJECT:<br/>IDP IN THE CLOUD<br/></h2>
                <br/>
                <p class="text-center">
-{% for lang, value in idp_metadata.iteritems() %}
+{% for lang, value in idp_metadata.items() %}
                   <a href="{{ idp_metadata[lang]['mdui_infoUrl'] | default('/'~lang~'/info.html') }}"><img height="36px" src="/{{ lang }}/{{ lang }}Flag.png"></a>
 {% endfor %}
                </p>
@@ -64,7 +64,14 @@
 
             <h3>USERS SUPPORT</h3>
             <ul>
-               <li>Technical Contact for {{ idp_metadata['en']['mdui_displayName'] }}: <a href="mailto:{{ idp_contacts['support']['mail']}}">{{ idp_contacts['support']['mail'] }}</a></li>
+               <li>Technical Contact for {{ idp_metadata['en']['mdui_displayName'] }}:</li>
+               <ul>
+                <li>e-mail: <a href="mailto:{{ idp_contacts['support']['mail'] }}">{{ idp_contacts['support']['mail'] }}</a></li>
+{% if idp_contacts['support']['telephone'] is defined and idp_contacts['support']['telephone'] != '' %}
+                <li>telephone: {{ idp_contacts['support']['telephone'] }}</li>
+{% endif %}
+               </ul>
+
             </ul>
 
             <h3>SERVICE OPERATOR</h3>
