@@ -507,9 +507,6 @@
   delegate_to: 127.0.0.1
   register: attribute_filter_v3_coco_xml
   changed_when: false
-  when:
-   - idp_config['sup_coco'] is defined
-   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
 
 - name: "Load custom 'attribute-filter-v3-coco.xml' provided"
   copy:
@@ -519,6 +516,8 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_coco'] is defined
+   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == True
   notify:
    - "Restart Jetty"
@@ -531,6 +530,8 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_coco'] is defined
+   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == False
   notify:
    - "Restart Jetty"
@@ -542,9 +543,6 @@
   delegate_to: 127.0.0.1
   register: attribute_filter_v3_rs_xml
   changed_when: false
-  when:
-   - idp_config['sup_rs'] is defined
-   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
 
 - name: "Load custom 'attribute-filter-v3-rs.xml' provided"
   copy:
@@ -554,6 +552,8 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_rs'] is defined
+   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == True
   notify:
    - "Restart Jetty"
@@ -566,6 +566,8 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_rs'] is defined
+   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == False
   notify:
    - "Restart Jetty"

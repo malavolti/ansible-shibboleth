@@ -38,6 +38,7 @@
     -->
 
 {% for md in idp_metadata_providers %}    
+{% if md['url'] is defined %}
     <MetadataProvider
       id="{{ md['id'] }}"
       xsi:type="FileBackedHTTPMetadataProvider"
@@ -47,38 +48,39 @@
 {% endif %}
       backingFile="%{idp.home}/metadata/{{ md['file'] }}"
       metadataURL="{{ md['url'] }}"
-      disregardTLSCertificate="{{ md['disregardTLSCertificate'] }}">
+      disregardTLSCertificate="{{ md['disregardTLSCertificate'] | default('false') }}">
 
 {% if (md['pubKey'] is defined) and (md['pubKey']|length > 0) %}
-      <!--
-          Verify the signature on the root element of the metadata aggregate
-          using a trusted metadata signing certificate.
-      -->
-      <MetadataFilter xsi:type="SignatureValidation" requireSignedRoot="true">
-         <PublicKey>
-            {{ md['pubKey'] }}
-         </PublicKey>
-      </MetadataFilter>
+         <!--
+             Verify the signature on the root element of the metadata aggregate
+             using a trusted metadata signing certificate.
+         -->
+         <MetadataFilter xsi:type="SignatureValidation" requireSignedRoot="true">
+            <PublicKey>
+               {{ md['pubKey'] }}
+            </PublicKey>
+         </MetadataFilter>
 
 {% endif %}
 {% if (md['maxValidInterval'] is defined) and (md['maxValidInterval']|length > 0) %}
-      <!--
-          Require a validUntil XML attribute on the root element and make sure its value is no more than 5 days into the future. 
-      -->
-      <MetadataFilter xsi:type="RequiredValidUntil" maxValidityInterval="{{ md['maxValidInterval'] }}"/>
+         <!--
+             Require a validUntil XML attribute on the root element and make sure its value is no more than 5 days into the future. 
+         -->
+         <MetadataFilter xsi:type="RequiredValidUntil" maxValidityInterval="{{ md['maxValidInterval'] }}"/>
 
 {% endif %}
-      <!-- Consume all SP metadata in the aggregate -->
-      <MetadataFilter xsi:type="EntityRoleWhiteList">
-        <RetainedRole>md:SPSSODescriptor</RetainedRole>
-      </MetadataFilter>
+         <!-- Consume all SP metadata in the aggregate -->
+         <MetadataFilter xsi:type="EntityRoleWhiteList">
+           <RetainedRole>md:SPSSODescriptor</RetainedRole>
+         </MetadataFilter>
 
 {% if (md['comment'] is defined) and (md['comment']|length > 0) %}
-      <!-- {{ md['comment'] }} -->
-	    <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
+         <!-- {{ md['comment'] }} -->
+	       <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
 {% endif %}
 
     </MetadataProvider>
+{% endif %}
 {% endfor %}
 
     <!--
