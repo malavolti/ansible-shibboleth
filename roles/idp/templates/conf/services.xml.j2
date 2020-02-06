@@ -123,7 +123,7 @@
 {% if idp_config is defined and idp_config['sup_coco'] in ['Yes','yes','True','true'] %}
         <value>%{idp.home}/conf/attribute-filter-v3-coco.xml</value>
 {% endif %}
-{% if attribute_filter_xml.stat.exists %}
+{% if (attribute_filter_xml is defined) and (attribute_filer_xml|length > 0) %}
         <value>%{idp.home}/conf/attribute-filter-v3-custom.xml</value>
 {% endif %}
     </util:list>
