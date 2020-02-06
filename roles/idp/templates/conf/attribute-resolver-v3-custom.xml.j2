@@ -11,22 +11,22 @@
     <!--      Attribute Definitions                 -->
     <!-- ========================================== -->
 
-{% for attr, value in idp_attrDef.iteritems() %}
+{% for attr, value in idp_attrDef.items() %}
     <AttributeDefinition{{ {'id': idp_attrDef[attr]['AttributeDefinition']['id'], 'xsi:type': idp_attrDef[attr]['AttributeDefinition']['type'], 'scope': idp_attrDef[attr]['AttributeDefinition']['scope'], 'sourceAttributeID': idp_attrDef[attr]['AttributeDefinition']['sourceAttributeID'], 'nameIdFormat': idp_attrDef[attr]['AttributeDefinition']['nameIdFormat'] }|xmlattr }}>
 {% for ref in idp_attrDef[attr]['Dependency'] %}
         <Dependency ref="{{ ref }}" />
 {% endfor %}
 {% if idp_attrDef[attr]['DisplayName'] %}
-{% for lang, value in idp_attrDef[attr]['DisplayName'].iteritems() %}
+{% for lang, value in idp_attrDef[attr]['DisplayName'].items() %}
         <DisplayName xml:lang="{{ lang }}">{{ value }}</DisplayName>
 {% endfor %}
 {% endif %}
 {% if idp_attrDef[attr]['DisplayDescription'] %}
-{% for lang, value in idp_attrDef[attr]['DisplayDescription'].iteritems() %}
+{% for lang, value in idp_attrDef[attr]['DisplayDescription'].items() %}
         <DisplayDescription xml:lang="{{ lang }}">{{ value }}</DisplayDescription>
 {% endfor %}
 {% endif %}
-{% for enc, value in idp_attrDef[attr]['AttributeEncoder'].iteritems() %}
+{% for enc, value in idp_attrDef[attr]['AttributeEncoder'].items() %}
         <AttributeEncoder xsi:type="{{ idp_attrDef[attr]['AttributeEncoder'][enc]['type'] }}" name="{{ idp_attrDef[attr]['AttributeEncoder'][enc]['name'] }}" friendlyName="{{ idp_attrDef[attr]['AttributeEncoder'][enc]['friendlyName'] }}" encodeType="{{ idp_attrDef[attr]['AttributeEncoder'][enc]['encodeType'] }}" />
 {% if idp_attrDef[attr]['AttributeDefinition']['type'] is equalto 'ScriptedAttribute' %}
         <Script>
