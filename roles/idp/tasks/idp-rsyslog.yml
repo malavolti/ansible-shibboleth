@@ -16,13 +16,10 @@
 
 - name: "Debian 8 - Install Rsyslog with RELP"
   apt:
-   name: "{{ item }}"
+   name: ['rsyslog', 'rsyslog-relp']
    state: latest
    install_recommends: no
    default_release: "jessie-backports"
-  with_items:
-   - "rsyslog"
-   - "rsyslog-relp"
   when:
    - ansible_distribution_release == "jessie"
    - rsyslog_srv is defined
@@ -33,12 +30,9 @@
 
 - name: "Debian 9 - Install Rsyslog with RELP"
   apt:
-   name: "{{ item }}"
+   name: ['rsyslog', 'rsyslog-relp']
    state: latest
    install_recommends: no
-  with_items:
-   - "rsyslog"
-   - "rsyslog-relp"
   when:
    - ansible_distribution_release == "stretch"
    - rsyslog_srv is defined

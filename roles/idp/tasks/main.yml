@@ -16,10 +16,6 @@
   when: idp_stat_attrs is undefined or idp_stat_attrs == ""
   tags: idp
 
-- name: "Include shibboleth identity provider variables"
-  include_vars: shib-idp-vars.yml
-  tags: idp
-
 - name: "Install Shibboleth IdP"
   import_tasks: idp-install.yml
   tags: idp

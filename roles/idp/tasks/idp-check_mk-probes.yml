@@ -7,11 +7,9 @@
 
 - name: "Install needed packages for Check MK plugin"
   apt:
-   name: "{{ item }}"
+   name: "python-ldap"
    state: latest
    install_recommends: no
-  with_items:
-   - "python-ldap"
   when:
    - check_mk is defined
    - check_mk['srv'] is defined
