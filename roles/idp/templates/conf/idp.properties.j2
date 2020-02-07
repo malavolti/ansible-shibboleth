@@ -8,7 +8,7 @@ idp.entityID= https://{{ fqdn }}/idp/shibboleth
 idp.scope= {{ idp_config['scope'] }}
 
 # General cookie properties (maxAge only applies to persistent cookies)
-#idp.cookie.secure = false
+idp.cookie.secure = true
 #idp.cookie.httpOnly = true
 #idp.cookie.domain =
 #idp.cookie.path =
@@ -60,7 +60,7 @@ idp.encryption.cert= %{idp.home}/credentials/idp-encryption.crt
 
 # Configuration of client- and server-side storage plugins
 #idp.storage.cleanupInterval = PT10M
-#idp.storage.htmlLocalStorage = false
+idp.storage.htmlLocalStorage = true
 
 # Set to true to expose more detailed errors in responses to SPs
 #idp.errors.detailed = false
@@ -77,11 +77,11 @@ idp.encryption.cert= %{idp.home}/credentials/idp-encryption.crt
 #idp.session.enabled = true
 
 # Set to "shibboleth.StorageService" for server-side storage of user sessions
-#idp.session.StorageService = shibboleth.ClientSessionStorageService
+idp.session.StorageService = shibboleth.ClientSessionStorageService
 {% if idp_config['storage_memcache_hosts'] is defined -%} 
-idp.session.StorageService = shibboleth.MemcachedStorageService
+#idp.session.StorageService = shibboleth.MemcachedStorageService
 {% else %}
-idp.session.StorageService = shibboleth.JPAStorageService
+#idp.session.StorageService = shibboleth.JPAStorageService
 {% endif %}
 
 
@@ -126,8 +126,8 @@ idp.authn.flows= Password
 #idp.authn.identitySwitchIsError = false
 
 # Set to "shibboleth.StorageService" or custom bean for alternate storage of consent
-#idp.consent.StorageService = shibboleth.ClientPersistentStorageService
-idp.consent.StorageService = shibboleth.JPAStorageService
+idp.consent.StorageService = shibboleth.ClientPersistentStorageService
+#idp.consent.StorageService = shibboleth.JPAStorageService
 
 # Set to "shibboleth.consent.AttributeConsentStorageKey" to use an attribute
 # to key user consent storage records (and set the attribute name)
@@ -161,11 +161,11 @@ idp.logout.elaboration = true
 #idp.policy.clockSkew = PT3M
 
 # Set to custom bean for alternate storage of replay cache
-#idp.replayCache.StorageService = shibboleth.StorageService
+idp.replayCache.StorageService = shibboleth.StorageService
 {% if idp_config['storage_memcache_hosts'] is defined -%} 
-idp.replayCache.StorageService = shibboleth.MemcachedStorageService
+#idp.replayCache.StorageService = shibboleth.MemcachedStorageService
 {% else %}
-idp.replayCache.StorageService = shibboleth.JPAStorageService
+#idp.replayCache.StorageService = shibboleth.JPAStorageService
 {% endif %}
 
 # Toggles whether to allow outbound messages via SAML artifact
@@ -175,11 +175,11 @@ idp.replayCache.StorageService = shibboleth.JPAStorageService
 # May differ to direct SAML 2 artifact lookups to specific server nodes
 #idp.artifact.endpointIndex = 2
 # Set to custom bean for alternate storage of artifact map state
-#idp.artifact.StorageService = shibboleth.StorageService
+idp.artifact.StorageService = shibboleth.StorageService
 {% if idp_config['storage_memcache_hosts'] is defined -%} 
-idp.artifact.StorageService = shibboleth.MemcachedStorageService
+#idp.artifact.StorageService = shibboleth.MemcachedStorageService
 {% else %}
-idp.artifact.StorageService = shibboleth.JPAStorageService 
+#idp.artifact.StorageService = shibboleth.JPAStorageService 
 {% endif %}
 
 # Name of access control policy for various admin flows
