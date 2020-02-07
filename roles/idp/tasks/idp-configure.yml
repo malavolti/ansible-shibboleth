@@ -320,7 +320,7 @@
   notify:
    - "Restart Jetty"
 
-- name: "Load default 'attribute-resolver.xml' provided by a template"
+- name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.3.x"
   template:
    src: "conf/attribute-resolver-v3-custom.xml.j2"
    dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
@@ -329,6 +329,20 @@
    mode: "0600"
   when:
    - attribute_resolver_xml.stat.exists == False
+   -  "shib_idp_version is search('3.3.')"
+  notify:
+   - "Restart Jetty"
+
+- name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.4.x"
+  template:
+   src: "conf/attribute-resolver-v3_4-custom.xml.j2"
+   dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
+   owner: "jetty"
+   group: "root"
+   mode: "0600"
+  when:
+   - attribute_resolver_xml.stat.exists == False
+   -  "shib_idp_version is search('3.4.')"
   notify:
    - "Restart Jetty"
 
