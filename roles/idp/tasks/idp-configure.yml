@@ -332,7 +332,7 @@
   notify:
    - "Restart Jetty"
 
-# Load /opt/shibboleth-idp/conf/attribute-filter-custom.xml
+# Load /opt/shibboleth-idp/conf/attribute-filter.xml
 - name: "Check if a custom 'attribute-filter.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter.xml"
@@ -343,7 +343,7 @@
 - name: "Load custom 'attribute-filter.xml' provided"
   copy:
    src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-custom.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
