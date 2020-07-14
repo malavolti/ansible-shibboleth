@@ -17,4 +17,4 @@
     - idpcloud_garr
     - check_mk_agent
     - sys-update
-  serial: 3
+  serial: 50
