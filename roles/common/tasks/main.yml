@@ -19,6 +19,11 @@
    mode: "0644" 
   tags: common
 
+- name: "Configure the 'hostname' with the FQDN provided"
+  hostname:
+   name: "{{ fqdn }}"
+  tags: common
+
 - name: "Configure the nameservers in the resolver"
   template:
    src: resolv.conf.j2
