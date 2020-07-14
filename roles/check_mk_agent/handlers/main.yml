@@ -1,2 +1,13 @@
 ---
 # handlers file for check_mk
+
+- name: "Activate changes on Check_MK centralized server"
+  uri:
+   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=activate_changes&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}"
+   method: GET 
+   status_code: 200
+   timeout: 300
+   headers:
+     Content-Type: "application/json; charset=UTF-8"
+  delegate_to: 127.0.0.1
+

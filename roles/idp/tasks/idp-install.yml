@@ -50,13 +50,13 @@
    group: "root"
    mode: "0600"
 
-- name: "Put the JSTL libraries, needed for Shibboleth IdP Status page, in the right position"
-  copy:
-   src: "files/jstl-1.2.jar"
-   dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/jstl-1.2.jar"
-   owner: "root"
-   group: "root"
-   mode: 0644
+#- name: "Put the JSTL libraries, needed for Shibboleth IdP Status page, in the right position"
+#  copy:
+#   src: "files/jstl-1.2.jar"
+#   dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/jstl-1.2.jar"
+#   owner: "root"
+#   group: "root"
+#   mode: 0644
 
 - name: "Create link for commons-dbcp, commons-pool and mysql JAR files used by Shibboleth IdP"
   file:

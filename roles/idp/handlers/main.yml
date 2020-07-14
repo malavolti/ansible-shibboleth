@@ -8,37 +8,66 @@
   args:
    chdir: "/opt/shibboleth-idp/bin"
 
-- name: "Reload Logging"
+- name: "Reload IdP Logging"
   shell: "./reload-service.sh -id shibboleth.LoggingService"
   args:
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload Metadata Resolver"
+- name: "Reload IdP Metadata Resolver"
   shell: "./reload-service.sh -id shibboleth.MetadataResolverService"
   args:
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload Attribute Resolver"
+- name: "Reload IdP Attribute Resolver"
   shell: "./reload-service.sh -id shibboleth.AttributeResolverService"
   args:
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload Attribute Filter"
+- name: "Reload IdP Attribute Filter"
   shell: "./reload-service.sh -id shibboleth.AttributeFilterService"
   args:
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload NameID Generation"
+- name: "Reload IdP NameID Generation"
   shell: "./reload-service.sh -id shibboleth.NameIdentifierGenerationService"
   args:
     chdir: "/opt/shibboleth-idp/bin"
   environment:
     JAVA_HOME: "{{ java_home_dir }}"
+
+- name: "Apply changes on CheckMK Server"
+  uri:
+   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=activate_changes&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}"
+   method: GET
+   timeout: 300
+   status_code: 200
+  delegate_to: 127.0.0.1
+
+- name: "Remove probes from CheckMK"
+  uri:
+   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=discover_services&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&mode=remove&hostname={{ fqdn }}"
+   method: GET
+   timeout: 300
+   status_code: 200
+  delegate_to: 127.0.0.1
+  notify:
+   - "Apply changes on CheckMK Server"
+
+- name: "Add probes to CheckMK"
+  uri:
+   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=discover_services&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&mode=new&hostname={{ fqdn }}"
+   method: GET
+   timeout: 300
+   status_code: 200
+  delegate_to: 127.0.0.1
+  notify:
+   - "Apply changes on CheckMK Server"
+

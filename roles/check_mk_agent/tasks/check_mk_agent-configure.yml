@@ -6,7 +6,7 @@
    url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=add_host&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&folder={{ check_mk['folder'] }}&hostname={{ fqdn }}"
    method: GET 
    status_code: 200
-   timeout: 500
+   timeout: 300
    headers:
      Content-Type: "application/json; charset=UTF-8"
   delegate_to: 127.0.0.1
@@ -19,13 +19,15 @@
    - check_mk['api_user_name'] is defined and check_mk['api_user_name'] != ''
    - check_mk['api_user_secret'] is defined and check_mk['api_user_secret'] != ''
    - check_mk['folder'] is defined and check_mk['folder'] != ''
+  notify:
+   - "Activate changes on Check_MK centralized server"
 
 - name: "Remove the IdP host from checking on check_mk server"
   uri:
    url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=delete_host&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&hostname={{ fqdn }}"
    method: GET 
    status_code: 200
-   timeout: 500
+   timeout: 300
    headers:
      Content-Type: "application/json; charset=UTF-8"
   delegate_to: 127.0.0.1
@@ -37,20 +39,5 @@
    - check_mk['site'] is defined and check_mk['site'] != ''
    - check_mk['api_user_name'] is defined and check_mk['api_user_name'] != ''
    - check_mk['api_user_secret'] is defined and check_mk['api_user_secret'] != ''
-
-- name: "Activate changes on Check_MK centralized server"
-  uri:
-   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=activate_changes&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}"
-   method: GET 
-   status_code: 200
-   timeout: 500
-   headers:
-     Content-Type: "application/json; charset=UTF-8"
-  delegate_to: 127.0.0.1
-  when:
-   - fqdn is defined and fqdn != ""
-   - check_mk is defined
-   - check_mk['srv'] is defined and check_mk['srv'] != ''
-   - check_mk['site'] is defined and check_mk['site'] != ''
-   - check_mk['api_user_name'] is defined and check_mk['api_user_name'] != ''
-   - check_mk['api_user_secret'] is defined and check_mk['api_user_secret'] != ''
+  notify:
+   - "Activate changes on Check_MK centralized server"
