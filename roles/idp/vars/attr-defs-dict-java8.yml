@@ -196,7 +196,7 @@ idp_attrDef:
             encodeType: "false"
       Script: |
               <![CDATA[
-               logger = Java.type("org.slf4j.LoggerFactory").getLogger("net.shibboleth.idp.attribute.resolver.displayNameBuilder");
+               //logger = Java.type("org.slf4j.LoggerFactory").getLogger("net.shibboleth.idp.attribute.resolver.displayNameBuilder");
                valueType =  Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
 
                // This implementation composes the value of the attribute displayName
@@ -224,27 +224,27 @@ idp_attrDef:
                }
 
                if (typeof displayName == 'undefined' || displayName.getValues().size() < 1) {
-                  logger.info("No displayName in LDAP found, creating one");
+                  //logger.info("No displayName in LDAP found, creating one");
 
                   if (cn != null) {
                      displayName.addValue(new valueType(cn));
-                     logger.info('displayName final value: ' + displayName.getValues().get(0));
+                     //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
                   } else if (sn != null && gn != null) {
                      displayName.addValue(new valueType(gn + ' ' + sn));
-                     logger.info('displayName final value: ' + displayName.getValues().get(0));
+                     //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
                   } else if (sn != null) {
                      displayName.addValue(new valueType(sn));
-                     logger.info('displayName final value: ' + displayName.getValues().get(0));
+                     //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
                   } else if (gn != null) {
                      displayName.addValue(new valueType(gn));
-                     logger.info('displayName final value: ' + displayName.getValues().get(0));
+                     //logger.info('displayName final value: ' + displayName.getValues().get(0));
                   }
 
                } else {
-                  logger.info('displayName had value: ' + displayName.getValues().get(0));
+                  //logger.info('displayName had value: ' + displayName.getValues().get(0));
                }
               ]]>
    preferredLanguage:
