@@ -1,0 +1,103 @@
+---
+# tasks file for rsync-backup-user
+
+#- name: "Configure the 'hostname' with the FQDN provided"
+#  hostname:
+#   name: "{{ fqdn }}"
+
+#- name: "Change AUTH to LOCAL7 on 'logback.xml'"
+#  copy:
+#   src: "{{ files_dir }}/{{ fqdn }}/idp/conf/logback.xml"
+#   dest: "/opt/shibboleth-idp/conf/logback.xml"
+#   owner: "jetty"
+#   group: "root"
+#   mode: "0600"
+
+#- name: "Configure '22-idpcloud.conf' Rsyslog configuration"
+#  template:
+#   src: "22-idpcloud.conf.j2"
+#   dest: "/etc/rsyslog.d/22-idpcloud.conf"
+#   owner: "root"
+#   group: "root"
+#   mode: "0644"
+
+#- name: "Configure '20-fticks.conf' Rsyslog configuration"
+#  copy:
+#   src: "33-fticks.conf"
+#   dest: "/etc/rsyslog.d/20-fticks.conf"
+#   owner: "root"
+#   group: "root"
+#   mode: "0644"
+
+#- name: "Remove '33-fticks.conf' Rsyslog configuration"
+#  file:
+#   path: "/etc/rsyslog.d/33-fticks.conf"
+#   state: "absent"
+#  notify:
+#   - "Restart rsyslog"
+
+#- name: "Unconditionally reboot the machine with all defaults"
+#  shell: "/sbin/shutdown -r +1"
+
+#- name: "Configure '99-slapd.conf' to put LDAP logs into /var/logs/slapd.log"
+#  copy:
+#    src: "99-slapd.conf"
+#    dest: "/etc/rsyslog.d/99-slapd.conf"
+#    owner: "root"
+#    group: "root"
+#    mode: "0644"
+
+#- name: "Change 'rsyslog.conf'"
+#  copy:
+#    src: "rsyslog.conf"
+#    dest: "/etc/rsyslog.conf"
+#    owner: "root"
+#    group: "root"
+#    mode: "0644"
+#    backup: "yes"
+
+#- name: "Restart Jetty"
+#  become: yes
+#  become_method: sudo
+#  systemd:
+#   name: jetty
+#   daemon-reload: True
+#   state: restarted
+
+#- name: "Restart slapd"
+#  become: yes
+#  become_method: sudo
+#  systemd:
+#   name: slapd
+#   daemon-reload: True
+#   state: restarted
+
+#- name: "Restart Rsyslog"
+#  become: yes
+#  become_method: sudo
+#  systemd:
+#   name: rsyslog
+#   daemon-reload: True
+#   state: restarted
+
+- name: "Be sure to have installed rsync"
+  apt:
+   name: rsync
+   state: latest
+   install_recommends: no
+
+- name: "Create the 'rsync-backup' user"
+  user:
+   name: rsync-backup
+
+- name: "Be sure to add the idpcloud-key to root authorized keys"
+  authorized_key:
+   user: rsync-backup
+   state: present
+   key: "{{ lookup('file', files_dir +'/all/rsync-backup_id_rsa.pub' ) }}"
+
+- name: "Change the owner of '/var/local/backups' to 'rsync-backup' to be able to retrieve backups from rsnapshot server"
+  file:
+   path: /var/local/backups
+   owner: rsync-backup
+   mode: 0750

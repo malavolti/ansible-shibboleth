@@ -11,9 +11,9 @@
 #idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
 #shib_idp_checksum: "742a772f19e11c55af8a18f16463b736230fc447cd8c4aaf4bf242c5b074087c"
 
-shib_idp_version: "3.4.6"
+shib_idp_version: "3.4.8"
 idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
-shib_idp_checksum: "a35ee8e0e8dafa3b66660b7df1762eea7876eabd38b06f34e45dc179745edc3c"
+shib_idp_checksum: "ad0fcd834d0c6571363d47ad6dde08fbb75cce3202c41f8c64a5b42614f95a27"
 
 
 ### Machine Variables:

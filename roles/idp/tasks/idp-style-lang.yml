@@ -147,8 +147,6 @@
    - idp_login is defined
    - idp_login['create_info_and_pp_pages'] is defined
    - idp_login['create_info_and_pp_pages'] in ["True","true","Yes","yes"]
-  notify:
-   - "Restart Apache"
 
 - name: "Check if a custom 'privacy.html' is provided under {{ files_dir}}/{{ fqdn }}/idp/styles/{{ lang }}/"
   stat:
@@ -182,8 +180,6 @@
    - idp_login is defined
    - idp_login['create_info_and_pp_pages'] is defined
    - idp_login['create_info_and_pp_pages'] in ["True","true","Yes","yes"]
-  notify:
-   - "Restart Apache"
 
 - name: "Remove all the Privacy Policy Pages created if they are not needed"
   file:

@@ -318,7 +318,7 @@
   when:
    - attribute_resolver_xml.stat.exists == True
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Resolver"
 
 - name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.3.x"
   template:
@@ -344,9 +344,9 @@
    - attribute_resolver_xml.stat.exists == False
    -  "shib_idp_version is search('3.4.')"
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Resolver"
 
-# Load /opt/shibboleth-idp/conf/attribute-filter-custom.xml
+# Load /opt/shibboleth-idp/conf/attribute-filter.xml
 - name: "Check if a custom 'attribute-filter.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter.xml"
@@ -357,14 +357,14 @@
 - name: "Load custom 'attribute-filter.xml' provided"
   copy:
    src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-custom.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
   when:
    - attribute_filter_xml.stat.exists == True
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/authn/ldap-authn-config.xml
 - name: "Check if a custom 'ldap-authn-config.xml' is provided under {{ files_dir }}/{{ fqdn }}/idp/conf/authn"
@@ -500,7 +500,7 @@
   when:
    - logback_xml.stat.exists == True
   notify:
-   - "Restart Jetty"
+   - "Reload Logging"
 
 - name: "Load default 'logback.xml' provided"
   copy:
@@ -512,7 +512,7 @@
   when:
    - logback_xml.stat.exists == False
   notify:
-   - "Restart Jetty"
+   - "Reload Logging"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-v3-coco.xml
 - name: "Check if a custom 'attribute-filter-v3-coco.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -534,7 +534,7 @@
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == True
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Filter"
 
 - name: "Load default 'attribute-filter-v3-coco.xml' provided"
   copy:
@@ -548,7 +548,7 @@
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == False
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-v3-rs.xml
 - name: "Check if a custom 'attribute-filter-v3-rs.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -570,7 +570,7 @@
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == True
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Filter"
 
 - name: "Load default 'attribute-filter-v3-rs.xml' provided"
   copy:
@@ -584,7 +584,7 @@
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == False
   notify:
-   - "Restart Jetty"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/audit.xml
 - name: "Check if a custom 'audit.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
