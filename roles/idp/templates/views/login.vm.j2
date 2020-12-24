@@ -271,11 +271,11 @@
                             <li class="list-help-item"><a href="#springMessageText("idp.aupPage", "#")"><span class="item-marker">&rsaquo;</span> #springMessageText("idp.auppage", "AUP Policy")</a></li>
                         </ul>
                         <p>
-{% for language, value in idp_metadata.iteritems() %}
+{% for language, value in idp_metadata.items() %}
                             <a href="javascript:setParam('lang', '{{ language }}');"><img height="16px" src="/{{ language }}/{{ language }}Flag.png"></a>
 {% endfor %}
                         </p>
-{% for fed, value in idp_login['fed_info'].iteritems() %}
+{% for fed, value in idp_login['fed_info'].items() %}
                         <p><a href="#springMessageText("{{ fed }}.url","#")"><img src="#springMessageText("{{ fed }}.logo" ,"/images/federation-logo.png")" alt="#springMessageText("{{ fed }}.name", "Federation Name")" style="width: 100px"/></a></p>
 {% endfor %}
                     </div> ## column two

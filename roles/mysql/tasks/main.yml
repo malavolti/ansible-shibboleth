@@ -38,15 +38,9 @@
 
 - name: "Install Mysql server and needed libraries"
   apt:
-   name: "{{ item }}"
+   name: ['python-mysqldb', 'mysql-server', 'libmysql-java', 'libcommons-dbcp-java', 'libcommons-pool-java']
    state: latest
    install_recommends: no
-  with_items:
-   - python-mysqldb
-   - mysql-server
-   - libmysql-java
-   - libcommons-dbcp-java
-   - libcommons-pool-java
   tags: mysql
 
 - name: "Configure .my.cnf file for a simple MySQL authentication"

@@ -7,14 +7,9 @@
 
 - name: "Be sure that phpLDAPadmin required packages are installed"
   apt:
-   name: "{{ item }}"
+   name: ['apache2-utils', 'python-passlib', 'gettext', 'php']
    state: latest
    install_recommends: no 
-  with_items:
-   - apache2-utils
-   - python-passlib
-   - gettext
-   - php
   notify:
    - "Restart Apache"
 
@@ -29,12 +24,9 @@
 
 - name: "Be sure that PHP7 LDAP support is installed"
   apt:
-   name: "{{ item }}"
+   name: ['php7.0-ldap', 'php7.0-xml']
    state: latest
    install_recommends: no
-  with_items:
-   - php7.0-ldap
-   - php7.0-xml
   notify:
    - "Restart Apache"
   when: ansible_distribution_release == "stretch"

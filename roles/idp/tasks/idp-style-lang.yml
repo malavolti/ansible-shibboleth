@@ -115,6 +115,26 @@
   notify:
    - "Restart Apache"
 
+- name: "Check if a custom 'info.html' is provided under {{ files_dir }}/{{ fqdn }}/idp/styles/{{ lang }}/"
+  stat:
+   path: "{{ files_dir }}/{{ fqdn }}/idp/styles/{{ item.key }}/info.html"
+  delegate_to: 127.0.0.1
+  with_dict: "{{ idp_metadata }}"
+  register: info_html
+  changed_when: false
+
+- name: "Put the Custom Info Page in the interested languages in the right position"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idp/styles/{{ item.item.key }}/info.html"
+   dest: "/var/www/html/{{ item.item.key }}/info.html"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  with_items: "{{ info_html.results }}"
+  when: item.stat.exists
+  notify:
+   - "Restart Apache"
+
 - name: "Put the Information Page in the interested languages in the right position"
   template:
    src: "styles/{{ item.key }}/info.html.j2"
@@ -127,6 +147,26 @@
    - idp_login is defined
    - idp_login['create_info_and_pp_pages'] is defined
    - idp_login['create_info_and_pp_pages'] in ["True","true","Yes","yes"]
+
+- name: "Check if a custom 'privacy.html' is provided under {{ files_dir}}/{{ fqdn }}/idp/styles/{{ lang }}/"
+  stat:
+   path: "{{ files_dir }}/{{ fqdn }}/idp/styles/{{ item.key }}/privacy.html"
+  delegate_to: 127.0.0.1
+  with_dict: "{{ idp_metadata }}"
+  register: privacy_html
+  changed_when: false
+
+- name: "Put the Custom Privacy Policy Page in the interested languages in the right position"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idp/styles/{{ item.item.key }}/privacy.html"
+   dest: "/var/www/html/{{ item.item.key }}/privacy.html"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  with_items: "{{ privacy_html.results }}"
+  when: item.stat.exists
+  notify:
+   - "Restart Apache"
 
 - name: "Put the Privacy Policy Page in the interested languages in the right position"
   template:

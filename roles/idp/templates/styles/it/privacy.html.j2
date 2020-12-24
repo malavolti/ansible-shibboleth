@@ -39,7 +39,7 @@
                <h2>PARTECIPAZIONE AL PROGETTO DI IDEM GARR:<br/>IDP IN THE CLOUD<br/></h2>
                <br/>
                <p class="text-center">
-{% for lang, value in idp_metadata.iteritems() %}
+{% for lang, value in idp_metadata.items() %}
                   <a href="{{ idp_metadata[lang]['mdui_privacyUrl'] | default('/'~lang~'/privacy.html') }}"><img height="36px" src="/{{ lang }}/{{ lang }}Flag.png"></a>
 {% endfor %}
                </p>

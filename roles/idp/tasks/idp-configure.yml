@@ -41,7 +41,7 @@
    mode: "0600"
 
 - name: "Store in the 'shib_db' ansible variable the result of the check on the existance of the 'shibboleth' database"
-  command: mysql -u root -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='shibboleth'"
+  command: mysql -h {{ idp_config['shibboleth_db_host'] }} -u shibboleth -p{{ idp_config['shibboleth_db_password'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='shibboleth'"
   register: shib_db
   changed_when: false
 
@@ -125,7 +125,7 @@
   when:
    - saml_nameid_xml.stat.exists == True
   notify:
-   - "Reload IdP NameID Generation"
+   - "Reload NameID Generation"
 
 - name: "Load default 'saml-nameid.xml'"
   copy:
@@ -137,7 +137,7 @@
   when:
    - saml_nameid_xml.stat.exists == False
   notify:
-   - "Reload IdP NameID Generation"
+   - "Reload NameID Generation"
 
 # Load /opt/shibboleth-idp/conf/global.xml
 - name: "Check if a custom 'global.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -318,9 +318,9 @@
   when:
    - attribute_resolver_xml.stat.exists == True
   notify:
-   - "Reload IdP Attribute Resolver"
+   - "Reload Attribute Resolver"
 
-- name: "Load default 'attribute-resolver.xml' provided by a template"
+- name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.3.x"
   template:
    src: "conf/attribute-resolver-v3-custom.xml.j2"
    dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
@@ -329,8 +329,22 @@
    mode: "0600"
   when:
    - attribute_resolver_xml.stat.exists == False
+   -  "shib_idp_version is search('3.3.')"
   notify:
-   - "Reload IdP Attribute Resolver"
+   - "Restart Jetty"
+
+- name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.4.x"
+  template:
+   src: "conf/attribute-resolver-v3_4-custom.xml.j2"
+   dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
+   owner: "jetty"
+   group: "root"
+   mode: "0600"
+  when:
+   - attribute_resolver_xml.stat.exists == False
+   -  "shib_idp_version is search('3.4.')"
+  notify:
+   - "Reload Attribute Resolver"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter.xml
 - name: "Check if a custom 'attribute-filter.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -350,7 +364,7 @@
   when:
    - attribute_filter_xml.stat.exists == True
   notify:
-   - "Reload IdP Attribute Filter"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/authn/ldap-authn-config.xml
 - name: "Check if a custom 'ldap-authn-config.xml' is provided under {{ files_dir }}/{{ fqdn }}/idp/conf/authn"
@@ -486,7 +500,7 @@
   when:
    - logback_xml.stat.exists == True
   notify:
-   - "Reload IdP Logging"
+   - "Reload Logging"
 
 - name: "Load default 'logback.xml' provided"
   copy:
@@ -498,7 +512,7 @@
   when:
    - logback_xml.stat.exists == False
   notify:
-   - "Reload IdP Logging"
+   - "Reload Logging"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-v3-coco.xml
 - name: "Check if a custom 'attribute-filter-v3-coco.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -507,9 +521,6 @@
   delegate_to: 127.0.0.1
   register: attribute_filter_v3_coco_xml
   changed_when: false
-  when:
-   - idp_config['sup_coco'] is defined
-   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
 
 - name: "Load custom 'attribute-filter-v3-coco.xml' provided"
   copy:
@@ -519,9 +530,11 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_coco'] is defined
+   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == True
   notify:
-   - "Reload IdP Attribute Filter"
+   - "Reload Attribute Filter"
 
 - name: "Load default 'attribute-filter-v3-coco.xml' provided"
   copy:
@@ -531,9 +544,11 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_coco'] is defined
+   - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_coco_xml.stat.exists == False
   notify:
-   - "Reload IdP Attribute Filter"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-v3-rs.xml
 - name: "Check if a custom 'attribute-filter-v3-rs.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -542,9 +557,6 @@
   delegate_to: 127.0.0.1
   register: attribute_filter_v3_rs_xml
   changed_when: false
-  when:
-   - idp_config['sup_rs'] is defined
-   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
 
 - name: "Load custom 'attribute-filter-v3-rs.xml' provided"
   copy:
@@ -554,9 +566,11 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_rs'] is defined
+   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == True
   notify:
-   - "Reload IdP Attribute Filter"
+   - "Reload Attribute Filter"
 
 - name: "Load default 'attribute-filter-v3-rs.xml' provided"
   copy:
@@ -566,9 +580,11 @@
    group: "root"
    mode: "0600"
   when:
+   - idp_config['sup_rs'] is defined
+   - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_v3_rs_xml.stat.exists == False
   notify:
-   - "Reload IdP Attribute Filter"
+   - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/audit.xml
 - name: "Check if a custom 'audit.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
@@ -657,6 +673,7 @@
 - name: "Remove fake RS SP Metadata from the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-rs-sp.xml"
+   state: absent
   when:
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["No","no","False","false"]
@@ -664,6 +681,7 @@
 - name: "Remove fake CoCo SP Metadata in the '/metadata' directory"
   file:
    path: "/opt/shibboleth-idp/metadata/fake-coco-sp.xml"
+   state: absent
   when:
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["No","no","False","false"]
@@ -722,6 +740,7 @@
    mode: "0644"
    validate_certs: "{{ item.disregardTLSCertificate }}"
   with_items: "{{ idp_metadata_providers }}"
+  when: item['url'] is defined
 
 # Jetty IdP Configuration
 - name: "Configure Jetty to load the IdP war file"
@@ -731,3 +750,23 @@
    owner: "root"
    group: "root"
    mode: 0644
+
+- name: "Upload Custom Metadata files"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idp/metadata/{{ item.file }}"
+   dest: "/opt/shibboleth-idp/metadata/{{ item.file }}"
+   owner: "jetty"
+   group: "root"
+   mode: "0644"
+  when: item['url'] is not defined
+  with_items: "{{ idp_metadata_providers }}"
+
+# IP access control to status page. Required by haproxy
+- name: "Shibboleth Status access control "
+  lineinfile:
+    path: "/opt/shibboleth-idp/conf/access-control.xml"
+    regexp: "p:allowedRanges="
+    line: "p:allowedRanges=\"#{ {'127.0.0.1/32', '::1/128', '{{ ip_access_control['idpstatus'] |  join(\"', '\") }}'} }\" />"
+  when: ip_access_control is defined and ip_access_control['idpstatus']
+  notify:
+   - "Reload Access Control"

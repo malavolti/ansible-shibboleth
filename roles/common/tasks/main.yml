@@ -68,22 +68,9 @@
 
 - name: "Install needed common packages"
   apt: 
-   name: "{{ item }}"
+   name: ['ntp', 'ntpdate', 'vim', 'ca-certificates', 'openssl', 'ssl-cert', 'aptitude', 'debconf', 'debconf-utils', 'apt-transport-https', 'patch', 'fail2ban']
    install_recommends: no
    state: latest
-  with_items:
-   - ntp
-   - ntpdate
-   - vim
-   - ca-certificates
-   - openssl
-   - ssl-cert
-   - aptitude
-   - debconf
-   - debconf-utils
-   - apt-transport-https
-   - patch
-   - fail2ban
   tags: common
 
 - name: "Replace default mirror site with the preferred one"

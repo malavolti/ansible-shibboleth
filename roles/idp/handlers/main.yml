@@ -1,73 +1,51 @@
 ---
 # handlers file for idp
 
-- name: "Rebuild idp WAR and restart Jetty"
+- name: "Rebuild idp.war"
   become: yes
   become_method: sudo
   shell: "./build.sh -Didp.target.dir=/opt/shibboleth-idp"
   args:
    chdir: "/opt/shibboleth-idp/bin"
 
-- name: "Reload IdP Logging"
+- name: "Reload Logging"
   shell: "./reload-service.sh -id shibboleth.LoggingService"
   args:
-    chdir: "/opt/shibboleth-idp/bin"
+   chdir: "/opt/shibboleth-idp/bin"
   environment:
-    JAVA_HOME: "{{ java_home_dir }}"
+   JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload IdP Metadata Resolver"
+- name: "Reload Metadata Resolver"
   shell: "./reload-service.sh -id shibboleth.MetadataResolverService"
   args:
-    chdir: "/opt/shibboleth-idp/bin"
+   chdir: "/opt/shibboleth-idp/bin"
   environment:
-    JAVA_HOME: "{{ java_home_dir }}"
+   JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload IdP Attribute Resolver"
+- name: "Reload Attribute Resolver"
   shell: "./reload-service.sh -id shibboleth.AttributeResolverService"
   args:
-    chdir: "/opt/shibboleth-idp/bin"
+   chdir: "/opt/shibboleth-idp/bin"
   environment:
-    JAVA_HOME: "{{ java_home_dir }}"
+   JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload IdP Attribute Filter"
+- name: "Reload Attribute Filter"
   shell: "./reload-service.sh -id shibboleth.AttributeFilterService"
   args:
-    chdir: "/opt/shibboleth-idp/bin"
+   chdir: "/opt/shibboleth-idp/bin"
   environment:
-    JAVA_HOME: "{{ java_home_dir }}"
+   JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Reload IdP NameID Generation"
+- name: "Reload NameID Generation"
   shell: "./reload-service.sh -id shibboleth.NameIdentifierGenerationService"
   args:
-    chdir: "/opt/shibboleth-idp/bin"
+   chdir: "/opt/shibboleth-idp/bin"
   environment:
-    JAVA_HOME: "{{ java_home_dir }}"
+   JAVA_HOME: "{{ java_home_dir }}"
 
-- name: "Apply changes on CheckMK Server"
-  uri:
-   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=activate_changes&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}"
-   method: GET
-   timeout: 300
-   status_code: 200
-  delegate_to: 127.0.0.1
-
-- name: "Remove probes from CheckMK"
-  uri:
-   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=discover_services&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&mode=remove&hostname={{ fqdn }}"
-   method: GET
-   timeout: 300
-   status_code: 200
-  delegate_to: 127.0.0.1
-  notify:
-   - "Apply changes on CheckMK Server"
-
-- name: "Add probes to CheckMK"
-  uri:
-   url: "https://{{ check_mk['srv'] }}/{{ check_mk['site'] }}/check_mk/webapi.py?action=discover_services&_username={{ check_mk['api_user_name'] }}&_secret={{ check_mk['api_user_secret'] }}&mode=new&hostname={{ fqdn }}"
-   method: GET
-   timeout: 300
-   status_code: 200
-  delegate_to: 127.0.0.1
-  notify:
-   - "Apply changes on CheckMK Server"
-
+- name: "Reload Access Control"
+  shell: "./reload-service.sh -id shibboleth.ReloadableAccessControlService"
+  args:
+   chdir: "/opt/shibboleth-idp/bin"
+  environment:
+   JAVA_HOME: "{{ java_home_dir }}"
