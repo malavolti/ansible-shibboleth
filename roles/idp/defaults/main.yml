@@ -15,12 +15,27 @@ shib_idp_version: "3.4.8"
 idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
 shib_idp_checksum: "ad0fcd834d0c6571363d47ad6dde08fbb75cce3202c41f8c64a5b42614f95a27"
 
+# Available:
+#
+# OpenJDK: 
+#   jdk_type: "openjdk"
+#   jdk_version: "8"
+#
+# Oracle JDK: 
+#   jdk_type: "oraclejdk"
+#   jdk_version: "8"
+#
+# Amazon Corretto JDK: 
+#   jdk_type: "corretto"
+#   jdk_version: "11"
+
+jdk_type: "corretto"
+jdk_version: "11"
 
 ### Machine Variables:
 fqdn: "idp.example.org"
 files_dir: "/opt/ansible-shibboleth/inventories/files"
 
-jdk_version: "8"
 url_password_reset: "https://{{ fqdn }}/flup"
 
 idp_login_default:
