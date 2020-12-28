@@ -311,7 +311,7 @@
 - name: "Load custom 'attribute-resolver.xml' provided"
   copy:
    src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-resolver.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-resolver.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
@@ -323,7 +323,7 @@
 - name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.3.x"
   template:
    src: "conf/attribute-resolver-v3-custom.xml.j2"
-   dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-resolver.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
@@ -336,7 +336,7 @@
 - name: "Load default 'attribute-resolver.xml' provided by a template for Shibboleth IdP 3.4.x"
   template:
    src: "conf/attribute-resolver-v3_4-custom.xml.j2"
-   dest: "/opt/shibboleth-idp/conf/attribute-resolver-v3-custom.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-resolver.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
