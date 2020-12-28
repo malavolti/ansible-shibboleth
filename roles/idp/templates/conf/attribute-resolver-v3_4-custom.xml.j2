@@ -20,7 +20,7 @@
         <AttributeEncoder xsi:type="SAML2String" name="urn:oid:0.9.2342.19200300.100.1.1" friendlyName="uid" encodeType="false" />
     </AttributeDefinition>
 
-    <AttributeDefinition id="surname" xsi:type="Simple">
+    <AttributeDefinition id="sn" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="sn" />
         <DisplayName xml:lang="en">Surname</DisplayName>
         <DisplayName xml:lang="it">Cognome</DisplayName>
@@ -38,7 +38,7 @@
         <AttributeEncoder xsi:type="SAML2String" name="urn:oid:2.5.4.42" friendlyName="givenName" encodeType="false" />
     </AttributeDefinition>
 
-    <AttributeDefinition id="commonName" xsi:type="Simple">
+    <AttributeDefinition id="cn" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="cn" />
         <DisplayName xml:lang="en">CommonName</DisplayName>
         <DisplayName xml:lang="it">Nome e Cognome</DisplayName>
@@ -56,7 +56,7 @@
         <AttributeEncoder xsi:type="SAML2String" name="urn:oid:2.5.4.12" friendlyName="title" encodeType="false" />
     </AttributeDefinition>
 
-    <AttributeDefinition id="email" xsi:type="Simple">
+    <AttributeDefinition id="mail" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="mail" />
         <DisplayName xml:lang="en">E-mail</DisplayName>
         <DisplayName xml:lang="it">E-mail</DisplayName>
@@ -94,9 +94,9 @@
 
     <AttributeDefinition id="displayName" xsi:type="ScriptedAttribute">
         <InputDataConnector ref="myLDAP" attributeNames="displayName" />
-        <InputAttributeDefinition ref="commonName" />
+        <InputAttributeDefinition ref="cn" />
         <InputAttributeDefinition ref="givenName" />
-        <InputAttributeDefinition ref="surname" />
+        <InputAttributeDefinition ref="sn" />
         <DisplayName xml:lang="en">Display name</DisplayName>
         <DisplayName xml:lang="it">Nome visualizzato</DisplayName>
         <DisplayDescription xml:lang="en">Preferred name of a person to be used when displaying entries</DisplayDescription>
@@ -111,10 +111,10 @@
  // from the values of the attributes givenName and surname.
 
  // check existance of commonName attribute and use it to generate displayName attribute
- if (commonName != null && commonName.getValues().size() > 0) {
-    cn = commonName.getValues().get(0);
+ if (cn != null && cn.getValues().size() > 0) {
+    commonName = cn.getValues().get(0);
  } else {
-    cn = null;
+    commonName = null;
  }
 
  // compose value from givenName and surname
@@ -125,34 +125,34 @@
  } else {
     gn = null;
  }
- if (surname != null && surname.getValues().size() > 0) {
-    sn = surname.getValues().get(0);
+ if (sn != null && sn.getValues().size() > 0) {
+    surname = sn.getValues().get(0);
  } else {
-    sn = null;
+    surname = null;
  }
 
  if (typeof displayName == 'undefined' || displayName.getValues().size() < 1) {
-    logger.info("No displayName in LDAP found, creating one");
+    //logger.info("No displayName in LDAP found, creating one");
 
-    if (cn != null) {
-       displayName.addValue(new valueType(cn));
-       logger.info('displayName final value: ' + displayName.getValues().get(0));
+    if (commonName != null) {
+       displayName.addValue(new valueType(commonName));
+       //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
-    } else if (sn != null && gn != null) {
-       displayName.addValue(new valueType(gn + ' ' + sn));
-       logger.info('displayName final value: ' + displayName.getValues().get(0));
+    } else if (surname != null && gn != null) {
+       displayName.addValue(new valueType(gn + ' ' + surname));
+       //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
-    } else if (sn != null) {
-       displayName.addValue(new valueType(sn));
-       logger.info('displayName final value: ' + displayName.getValues().get(0));
+    } else if (surname != null) {
+       displayName.addValue(new valueType(surname));
+       //logger.info('displayName final value: ' + displayName.getValues().get(0));
 
     } else if (gn != null) {
        displayName.addValue(new valueType(gn));
-       logger.info('displayName final value: ' + displayName.getValues().get(0));
+       //logger.info('displayName final value: ' + displayName.getValues().get(0));
     }
 
  } else {
-    logger.info('displayName had value: ' + displayName.getValues().get(0));
+    //logger.info('displayName had value: ' + displayName.getValues().get(0));
  }
 ]]>
         </Script>
@@ -362,13 +362,12 @@
 
     <!-- Data Connector for static attributes -->
     <DataConnector id="staticAttributes" xsi:type="Static">
-{% for attr in idp_stat_attrs %}
-        <Attribute id="{{ attr['attrName'] }}">
-{% for attrVal in attr['attrValues'] %}
-            <Value>{{ attrVal }}</Value>
-{% endfor %}
+        <Attribute id="schacHomeOrganization">
+            <Value>%{idp.scope}</Value>
         </Attribute>
-{% endfor %}
-    </DataConnector>
+        <Attribute id="schacHomeOrganizationType">
+            <Value>urn:schac:homeOrganizationType:int:researchHospital</Value>
+        </Attribute>
+     </DataConnector>
 
 </AttributeResolver>

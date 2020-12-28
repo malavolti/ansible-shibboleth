@@ -21,7 +21,7 @@
       <AttributeRule attributeID="eduPersonTargetedID">
           <PermitValueRule xsi:type="ANY" />
       </AttributeRule>
-      <AttributeRule attributeID="email">
+      <AttributeRule attributeID="mail">
           <PermitValueRule xsi:type="ANY"/>
       </AttributeRule>
       <AttributeRule attributeID="displayName">
@@ -30,7 +30,7 @@
       <AttributeRule attributeID="givenName">
           <PermitValueRule xsi:type="ANY" />
       </AttributeRule>
-      <AttributeRule attributeID="surname">
+      <AttributeRule attributeID="sn">
           <PermitValueRule xsi:type="ANY" />
       </AttributeRule>
 

@@ -3,17 +3,17 @@
 
 # Shibboleth v3.3.2
 #shib_idp_version: "3.3.2"
-#idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
+#idp_dl_url: "https://shibboleth.net/downloads/identity-provider/archive/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
 #shib_idp_checksum: "ed9fbefd273199d2841d4045b2661671c53825ed3c7d52d38bfe516b39d5fc64"
 
 # Shibboleth v3.3.3
-#shib_idp_version: "3.3.3"
-#idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
-#shib_idp_checksum: "742a772f19e11c55af8a18f16463b736230fc447cd8c4aaf4bf242c5b074087c"
+shib_idp_version: "3.3.3"
+idp_dl_url: "https://shibboleth.net/downloads/identity-provider/archive/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
+shib_idp_checksum: "742a772f19e11c55af8a18f16463b736230fc447cd8c4aaf4bf242c5b074087c"
 
-shib_idp_version: "3.4.8"
-idp_dl_url: "https://shibboleth.net/downloads/identity-provider/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
-shib_idp_checksum: "ad0fcd834d0c6571363d47ad6dde08fbb75cce3202c41f8c64a5b42614f95a27"
+#shib_idp_version: "3.4.8"
+#idp_dl_url: "https://shibboleth.net/downloads/identity-provider/archive/{{ shib_idp_version }}/shibboleth-identity-provider-{{ shib_idp_version }}.tar.gz"
+#shib_idp_checksum: "ad0fcd834d0c6571363d47ad6dde08fbb75cce3202c41f8c64a5b42614f95a27"
 
 # Available:
 #
