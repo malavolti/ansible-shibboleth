@@ -287,16 +287,25 @@
   notify:
    - "Restart Jetty"
 
-- name: "Create metadata-providers.xml and the Federation Attribute Filter"
+- name: "Create metadata-providers.xml"
   template:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
+   src: "conf/metadata-providers.xml.j2"
+   dest: "/opt/shibboleth-idp/conf/metadata-providers.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
-  with_items:
-   - { src: "conf/attribute-filter-v3-federation.xml.j2", dest: "/opt/shibboleth-idp/conf/attribute-filter-v3-federation.xml" }
-   - { src: "conf/metadata-providers.xml.j2", dest: "/opt/shibboleth-idp/conf/metadata-providers.xml" }
+  notify:
+   - "Restart Jetty"
+
+- name: "Create Federation Attribute Filter for Shibboleth IdP v3.x"
+  template:
+   src: "conf/attribute-filter-v3-federation.xml.j2"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter-federation.xml"
+   owner: "jetty"
+   group: "root"
+   mode: "0600"
+  when:
+   -  "shib_idp_version is search('3.')"
   notify:
    - "Restart Jetty"
 
@@ -514,75 +523,77 @@
   notify:
    - "Reload Logging"
 
-# Load /opt/shibboleth-idp/conf/attribute-filter-v3-coco.xml
-- name: "Check if a custom 'attribute-filter-v3-coco.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+# Load /opt/shibboleth-idp/conf/attribute-filter-coco.xml
+- name: "Check if a custom 'attribute-filter-coco.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
   stat:
-   path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-v3-coco.xml"
+   path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-coco.xml"
   delegate_to: 127.0.0.1
-  register: attribute_filter_v3_coco_xml
+  register: attribute_filter_coco_xml
   changed_when: false
 
-- name: "Load custom 'attribute-filter-v3-coco.xml' provided"
+- name: "Load custom 'attribute-filter-coco.xml' provided"
   copy:
-   src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-v3-coco.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-v3-coco.xml"
+   src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-coco.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter-coco.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
   when:
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
-   - attribute_filter_v3_coco_xml.stat.exists == True
+   - attribute_filter_coco_xml.stat.exists == True
   notify:
    - "Reload Attribute Filter"
 
-- name: "Load default 'attribute-filter-v3-coco.xml' provided"
+- name: "Load default 'attribute-filter-coco.xml' provided"
   copy:
    src: "files/conf/attribute-filter-v3-coco.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-v3-coco.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter-coco.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
   when:
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
-   - attribute_filter_v3_coco_xml.stat.exists == False
+   - attribute_filter_coco_xml.stat.exists == False
+   -  "shib_idp_version is search('3.')"
   notify:
    - "Reload Attribute Filter"
 
-# Load /opt/shibboleth-idp/conf/attribute-filter-v3-rs.xml
-- name: "Check if a custom 'attribute-filter-v3-rs.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+# Load /opt/shibboleth-idp/conf/attribute-filter-rs.xml
+- name: "Check if a custom 'attribute-filter-rs.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
   stat:
-   path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-v3-rs.xml"
+   path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-rs.xml"
   delegate_to: 127.0.0.1
-  register: attribute_filter_v3_rs_xml
+  register: attribute_filter_rs_xml
   changed_when: false
 
-- name: "Load custom 'attribute-filter-v3-rs.xml' provided"
+- name: "Load custom 'attribute-filter-rs.xml' provided"
   copy:
-   src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-v3-rs.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-v3-rs.xml"
+   src: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-rs.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter-rs.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
   when:
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
-   - attribute_filter_v3_rs_xml.stat.exists == True
+   - attribute_filter_rs_xml.stat.exists == True
   notify:
    - "Reload Attribute Filter"
 
-- name: "Load default 'attribute-filter-v3-rs.xml' provided"
+- name: "Load default 'attribute-filter-rs.xml' provided"
   copy:
    src: "files/conf/attribute-filter-v3-rs.xml"
-   dest: "/opt/shibboleth-idp/conf/attribute-filter-v3-rs.xml"
+   dest: "/opt/shibboleth-idp/conf/attribute-filter-rs.xml"
    owner: "jetty"
    group: "root"
    mode: "0600"
   when:
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
-   - attribute_filter_v3_rs_xml.stat.exists == False
+   - attribute_filter_rs_xml.stat.exists == False
+   -  "shib_idp_version is search('3.')"
   notify:
    - "Reload Attribute Filter"
 
