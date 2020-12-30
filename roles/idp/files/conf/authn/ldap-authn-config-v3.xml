@@ -10,6 +10,11 @@
        default-destroy-method="destroy"
        default-lazy-init="true">
 
+    <!-- 
+        Handled account state with OpenLDAP for 'bindAndSearchAuthenticator' and 'adAuthenticator': 
+        https://wiki.shibboleth.net/confluence/display/IDP30/LDAPAuthnConfiguration#LDAPAuthnConfiguration-HandlingaccountstatewithOpenLDAP 
+    -->
+
     <alias name="%{idp.authn.LDAP.authenticator:anonSearchAuthenticator}" alias="shibboleth.authn.LDAP.authenticator" />
     <bean id="shibboleth.authn.LDAP.returnAttributes" parent="shibboleth.CommaDelimStringArray">
         <constructor-arg type="java.lang.String" value="%{idp.authn.LDAP.returnAttributes:1.1}" />
@@ -120,17 +125,14 @@
         <constructor-arg index="1" ref="authHandler" />
     </bean>
 
-    <!-- Want to use ppolicy? Configure support by adding <bean id="authenticationResponseHandler" class="org.ldaptive.auth.ext.PasswordPolicyAuthenticationResponseHandler"
-        /> add p:authenticationResponseHandlers-ref="authenticationResponseHandler" to the authenticator <bean id="authenticationControl"
-        class="org.ldaptive.control.PasswordPolicyControl" /> add p:authenticationControls-ref="authenticationControl" to the authHandler -->
-    <bean id="authenticationControl"  class="org.ldaptive.control.PasswordPolicyControl" />
-
     <!-- Active Directory Configuration -->
     <bean id="adAuthenticator" class="org.ldaptive.auth.Authenticator" p:authenticationResponseHandlers-ref="authenticationResponseHandler"
         p:resolveEntryOnFailure="%{idp.authn.LDAP.resolveEntryOnFailure:false}">
         <constructor-arg index="0" ref="formatDnResolver" />
         <constructor-arg index="1" ref="authHandler" />
     </bean>
+
+    <bean id="authenticationControl"  class="org.ldaptive.control.PasswordPolicyControl" />
     <bean id="authenticationResponseHandler" class="org.ldaptive.auth.ext.PasswordPolicyAuthenticationResponseHandler" />
 
 </beans>

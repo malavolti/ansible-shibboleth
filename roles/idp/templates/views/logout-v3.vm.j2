@@ -14,6 +14,10 @@
 ## environment - Spring Environment object for property resolution
 ## custom - arbitrary object injected by deployer
 ##
+#set ($rpContext = $profileRequestContext.getSubcontext("net.shibboleth.idp.profile.context.RelyingPartyContext"))
+#if ($rpContext)
+#set ($rpUIContext = $rpContext.getSubcontext("net.shibboleth.idp.ui.context.RelyingPartyUIContext"))
+#end
 <!DOCTYPE html>
 <html>
     <head>
@@ -40,6 +44,18 @@
             and should be customized. It is not fully internationalized because the presentation will be a highly localized
             decision, and we don't have a good suggestion for a default.</p>
             <br>
+    
+            #if ($rpContext)
+                <p>#springMessageText("idp.logout.sp-initiated", "You have been logged out of the following service:")</p>
+                <blockquote>
+                #if ($rpUIContext)
+                    $encoder.encodeForHTML($rpUIContext.getServiceName())
+                #else
+                    $encoder.encodeForHTML($rpContext.getRelyingPartyId())
+                #end
+                </blockquote>
+                <br>
+            #end
 
             #if ( $logoutContext and !$logoutContext.getSessionMap().isEmpty() )
                 <p>#springMessageText("idp.logout.ask", "Would you like to attempt to log out of all services accessed during your session? Please select <strong>Yes</strong> or <strong>No</strong> to ensure the logout operation completes, or wait a few seconds for Yes.")</p>
@@ -87,6 +103,6 @@
         </div>
       </footer>
     </div>
-
-    </body>
+    
+ 	</body>
 </html>

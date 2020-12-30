@@ -42,6 +42,7 @@
   when: 
    - shib_tarball.stat.exists == False
 
+# Create 'shibboleth' DB only for Shibboleth IdP v3.x
 - name: "Put the Shibboleth Identity Provider persistent-id database structure file in the right position"
   template:
    src: "shib-idp-persistentId-db.sql.j2"
@@ -49,6 +50,8 @@
    owner: "root"
    group: "root"
    mode: "0600"
+  when:
+   - "shib_idp_version is search('3.')"
 
 #- name: "Put the JSTL libraries, needed for Shibboleth IdP Status page, in the right position"
 #  copy:
