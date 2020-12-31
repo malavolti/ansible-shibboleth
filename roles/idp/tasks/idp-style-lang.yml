@@ -1,14 +1,44 @@
 ---
 # tasks file for IdP Style and Languages
-- name: "Enable Apache configuration for the Shibboleth IdP application"
+- name: "Check if Apache IDP conf is already enabled"
+  stat:
+   path: "/etc/apache2/conf-enabled/idp.conf"
+  register: idp_apache
+  changed_when: false
+  tags: test1
+
+- name: "Remove any 'idp.conf' file into '/etc/apache2/conf-enabled'"
+  file:
+   path: "/etc/apache2/conf-enabled/idp.conf"
+   state: absent
+  when: idp_apache.stat.isreg is defined and idp_apache.stat.isreg
+  notify:
+   - "Restart Apache"
+  tags: test1
+
+- name: "Add Apache IDP conf"
   template:
    src: "idp.conf.j2"
-   dest: "/etc/apache2/conf-enabled/idp.conf"
+   dest: "/etc/apache2/conf-available/idp.conf"
    owner: "root"
    group: "root"
    mode: "0600"
+  when: idp_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
+  tags: test1
+
+- name: "Add IDP support to Apache HTTPS VirtualHost"
+  blockinfile:
+    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - IDP"
+    insertbefore: "</VirtualHost>"
+    block: |
+      Include conf-available/idp.conf
+  when: idp_apache.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+  tags: test1
 
 - name: "Put Federation logo and eduGAIN logo in the right position"
   copy:

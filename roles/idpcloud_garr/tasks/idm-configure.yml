@@ -112,27 +112,75 @@
    group: "root"
    mode: "0644"
 
-- name: "Be sure to load 'idm-tools' apache2 configuration files"
-  copy:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
-   owner: "root"
-   group: "root"
-   mode: "0644"
-  with_items:
-   - { src: "files/apache2/conf-enabled/idm-tools.conf", dest: "/etc/apache2/conf-enabled/idm-tools.conf"  }
+- name: "Check if Apache IDM-TOOLS conf is already enabled"
+  stat:
+   path: "/etc/apache2/conf-available/idm-tools.conf"
+  register: idm_tools_apache
+  changed_when: false
+
+- name: "Remove any 'idm-tools.conf' file into '/etc/apache2/conf-enabled'"
+  file:
+   path: "/etc/apache2/conf-enabled/idm-tools.conf"
+   state: absent
+  when: idm_tools_apache.stat.isreg is defined and idm_tools_apache.stat.isreg
   notify:
    - "Restart Apache"
 
-- name: "Be sure to load 'statistics' apache2 configuration files"
+- name: "Load Apache IDM-TOOLS conf"
   copy:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
+   src: "files/apache2/conf-available/idm-tools.conf"
+   dest: "/etc/apache2/conf-available/idm-tools.conf"
    owner: "root"
    group: "root"
    mode: "0644"
-  with_items:
-   - { src: "files/apache2/conf-enabled/statistics.conf", dest: "/etc/apache2/conf-enabled/statistics.conf"  }
+  when: idm_tools_apache.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+
+- name: "Add IDM-TOOLS support to Apache HTTPS VirtualHost"
+  blockinfile:
+    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - IDM-TOOLS"
+    insertbefore: "</VirtualHost>"
+    block: |
+      Include conf-available/idm-tools.conf
+  when: idm_tools_apache.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+
+- name: "Check if Apache STATISTICS conf is already enabled"
+  stat:
+   path: "/etc/apache2/conf-enabled/statistics.conf"
+  register: stats_apache
+  changed_when: false
+
+- name: "Remove any 'statistics.conf' file into '/etc/apache2/conf-enabled'"
+  file:
+   path: "/etc/apache2/conf-enabled/statistics.conf"
+   state: absent
+  when: stats_apache.stat.isreg is defined and stats_apache.stat.isreg
+  notify:
+   - "Restart Apache"
+
+- name: "Load Apache STATISTICS conf"
+  copy:
+   src: "files/apache2/conf-available/statistics.conf"
+   dest: "/etc/apache2/conf-available/statistics.conf"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  when: stats_apache.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+
+- name: "Add STATISTICS support to Apache HTTPS VirtualHost"
+  blockinfile:
+    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - STATISTICS"
+    insertbefore: "</VirtualHost>"
+    block: |
+      Include conf-available/statistics.conf
+  when: stats_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
 
