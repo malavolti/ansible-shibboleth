@@ -1,14 +1,44 @@
 ---
 # tasks file for IdP Style and Languages
-- name: "Enable Apache configuration for the Shibboleth IdP application"
+- name: "Check if Apache IDP conf is already enabled"
+  stat:
+   path: "/etc/apache2/conf-enabled/idp.conf"
+  register: idp_apache
+  changed_when: false
+  tags: test1
+
+- name: "Remove any 'idp.conf' file into '/etc/apache2/conf-enabled'"
+  file:
+   path: "/etc/apache2/conf-enabled/idp.conf"
+   state: absent
+  when: idp_apache.stat.isreg is defined and idp_apache.stat.isreg
+  notify:
+   - "Restart Apache"
+  tags: test1
+
+- name: "Add Apache IDP conf"
   template:
    src: "idp.conf.j2"
-   dest: "/etc/apache2/conf-enabled/idp.conf"
+   dest: "/etc/apache2/conf-available/idp.conf"
    owner: "root"
    group: "root"
    mode: "0600"
+  when: idp_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
+  tags: test1
+
+- name: "Add IDP support to Apache HTTPS VirtualHost"
+  blockinfile:
+    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - IDP"
+    insertbefore: "</VirtualHost>"
+    block: |
+      Include conf-available/idp.conf
+  when: idp_apache.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+  tags: test1
 
 - name: "Put Federation logo and eduGAIN logo in the right position"
   copy:
@@ -50,7 +80,7 @@
   notify:
    - "Restart Apache"
 
-- name: "Put the Shibboleth IdP Views files in the right position"
+- name: "Put the Shibboleth IdP Views files in the right position for Shibboleth IdP v3.x"
   template:
    src: "{{ item.src }}"
    dest: "{{ item.dest }}"
@@ -58,11 +88,31 @@
    group: "root"
    mode: "0644"
   with_items:
-   - { src: "views/login.vm.j2", dest: "/opt/shibboleth-idp/views/login.vm" }
-   - { src: "views/logout.vm.j2", dest: "/opt/shibboleth-idp/views/logout.vm" }
-   - { src: "views/logout-complete.vm.j2", dest: "/opt/shibboleth-idp/views/logout-complete.vm" }
-   - { src: "views/logout-propagate.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
-   - { src: "views/intercept/attribute-release.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
+   - { src: "views/login-v3.vm.j2", dest: "/opt/shibboleth-idp/views/login.vm" }
+   - { src: "views/logout-v3.vm.j2", dest: "/opt/shibboleth-idp/views/logout.vm" }
+   - { src: "views/logout-v3-complete.vm.j2", dest: "/opt/shibboleth-idp/views/logout-complete.vm" }
+   - { src: "views/logout-v3-propagate.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
+   - { src: "views/intercept/attribute-release-v3.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
+  when:
+   - "shib_idp_version is search('3.')"
+  notify:
+   - "Restart Apache"
+
+- name: "Put the Shibboleth IdP Views files in the right position for Shibboleth IdP v4.x"
+  template:
+   src: "{{ item.src }}"
+   dest: "{{ item.dest }}"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  with_items:
+   - { src: "views/login-v4.vm.j2", dest: "/opt/shibboleth-idp/views/login.vm" }
+   - { src: "views/logout-v4.vm.j2", dest: "/opt/shibboleth-idp/views/logout.vm" }
+   - { src: "views/logout-complete-v4.vm.j2", dest: "/opt/shibboleth-idp/views/logout-complete.vm" }
+   - { src: "views/logout-propagate-v4.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
+   - { src: "views/intercept/attribute-release-v4.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
+  when:
+   - "shib_idp_version is search('4.')"
   notify:
    - "Restart Apache"
 
@@ -79,15 +129,31 @@
   notify:
    - "Restart Apache"
 
-- name: "Put severals messages_LANGUAGE.properties in the right position"
+- name: "Put severals messages_LANGUAGE.properties in the right position for Shibboleth IdP v3.x"
   copy:
-   src: "files/messages/messages_{{ item.key }}.properties"
+   src: "files/messages/messages_{{ item.key }}-v3.properties"
    dest: "/opt/shibboleth-idp/messages/messages_{{ item.key }}.properties"
    owner: "root"
    group: "root"
    mode: "0644"
   with_dict: "{{ idp_metadata }}"
-  when: "item.key != 'en'"
+  when: 
+   - "item.key != 'en'"
+   - "shib_idp_version is search('3.')"
+  notify:
+   - "Restart Apache"
+
+- name: "Put severals messages_LANGUAGE.properties in the right position for Shibboleth IdP v4.x"
+  copy:
+   src: "files/messages/messages_{{ item.key }}-v4.properties"
+   dest: "/opt/shibboleth-idp/messages/messages_{{ item.key }}.properties"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  with_dict: "{{ idp_metadata }}"
+  when: 
+   - "item.key != 'en'"
+   - "shib_idp_version is search('4.')"
   notify:
    - "Restart Apache"
 
