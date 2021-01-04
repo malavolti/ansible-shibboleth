@@ -22,11 +22,15 @@
    state: latest
    install_recommends: no
 
-- name: "Configure default-java link"
+- name: "Correct java version selected"
+  alternatives:
+    name: "java"
+    path: "/usr/lib/jvm/java-{{ jdk_version }}-amazon-corretto/bin/java"
+
+- name: "Create the 'default-java' link"
   file:
    src: "/usr/lib/jvm/java-{{ jdk_version }}-amazon-corretto"
    dest: "/usr/lib/jvm/default-java"
    state: link
 
-- name: "Set default alternative Java"
-  command: "update-alternatives --set java /usr/lib/jvm/java-{{ jdk_version }}-amazon-corretto/bin/java"
+
