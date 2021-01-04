@@ -5,7 +5,6 @@
    path: "/etc/apache2/conf-enabled/idp.conf"
   register: idp_apache
   changed_when: false
-  tags: test1
 
 - name: "Remove any 'idp.conf' file into '/etc/apache2/conf-enabled'"
   file:
@@ -14,7 +13,6 @@
   when: idp_apache.stat.isreg is defined and idp_apache.stat.isreg
   notify:
    - "Restart Apache"
-  tags: test1
 
 - name: "Add Apache IDP conf"
   template:
@@ -26,7 +24,6 @@
   when: idp_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
-  tags: test1
 
 - name: "Add IDP support to Apache HTTPS VirtualHost"
   blockinfile:
@@ -38,7 +35,34 @@
   when: idp_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
-  tags: test1
+
+- name: "Check if SHIB-LOCALHOST conf is already enabled"
+  stat:
+   path: "/etc/apache2/conf-enabled/shib-localhost.conf"
+  register: shib_lo
+  changed_when: false
+
+- name: "Add Apache SHIB-LOCALHOST conf"
+  copy:
+   src: "files/apache/shib-localhost.conf"
+   dest: "/etc/apache2/conf-available/shib-localhost.conf"
+   owner: "root"
+   group: "root"
+   mode: "0600"
+  when: shib_lo.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
+
+- name: "Add SHIB-LOCALHOST support to Apache HTTPS VirtualHost"
+  blockinfile:
+    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - SHIB-LOCALHOST"
+    insertafter: "</IfModule>"
+    block: |
+      Include conf-available/shib-localhost.conf
+  when: shib_lo.stat.islnk is not defined
+  notify:
+   - "Restart Apache"
 
 - name: "Put Federation logo and eduGAIN logo in the right position"
   copy:
