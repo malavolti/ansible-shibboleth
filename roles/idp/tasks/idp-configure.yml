@@ -76,7 +76,7 @@
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
 
 # Load /opt/shibboleth-idp/conf/saml-nameid.properties
-- name: "Check if a custom 'saml-nameid.properties' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'saml-nameid.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/saml-nameid.properties"
   delegate_to: 127.0.0.1
@@ -122,7 +122,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/saml-nameid.xml
-- name: "Check if a custom 'saml-nameid.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'saml-nameid.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/saml-nameid.xml"
   delegate_to: 127.0.0.1
@@ -154,7 +154,7 @@
    - "Reload NameID Generation"
 
 # Load /opt/shibboleth-idp/conf/global.xml
-- name: "Check if a custom 'global.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'global.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/global.xml"
   delegate_to: 127.0.0.1
@@ -174,7 +174,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/idp.properties
-- name: "Check if a custom 'idp.properties' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'idp.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/idp.properties"
   delegate_to: 127.0.0.1
@@ -220,7 +220,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/ldap.properties
-- name: "Check if a custom 'ldap.properties' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'ldap.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat: 
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/ldap.properties"
   delegate_to: 127.0.0.1
@@ -278,7 +278,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/services.properties
-- name: "Check if a custom 'services.properties' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'services.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/services.properties"
   delegate_to: 127.0.0.1
@@ -298,7 +298,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/services.xml
-- name: "Check if a custom 'services.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'services.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/services.xml"
   delegate_to: 127.0.0.1
@@ -379,7 +379,7 @@
 
 
 # Load /opt/shibboleth-idp/conf/attribute-resolver.xml
-- name: "Check if a custom 'attribute-resolver.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'attribute-resolver.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-resolver.xml"
   delegate_to: 127.0.0.1
@@ -438,7 +438,7 @@
    - "Reload Attribute Resolver"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter.xml
-- name: "Check if a custom 'attribute-filter.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'attribute-filter.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter.xml"
   delegate_to: 127.0.0.1
@@ -458,7 +458,7 @@
    - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/authn/ldap-authn-config.xml
-- name: "Check if a custom 'ldap-authn-config.xml' is provided under {{ files_dir }}/{{ fqdn }}/idp/conf/authn"
+- name: "Check if a custom 'ldap-authn-config.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf/authn"
   stat: 
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/authn/ldap-authn-config.xml"
   delegate_to: 127.0.0.1
@@ -519,7 +519,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/authn/password-authn-config.xml
-- name: "Check if a custom 'password-authn-config.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf/authn"
+- name: "Check if a custom 'password-authn-config.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf/authn"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/authn/password-authn-config.xml"
   delegate_to: 127.0.0.1
@@ -580,7 +580,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/c14n/subject-c14n.xml
-- name: "Check if a custom 'subject-c14n.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf/authn"
+- name: "Check if a custom 'subject-c14n.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf/authn"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/c14n/subject-c14n.xml"
   delegate_to: 127.0.0.1
@@ -601,7 +601,7 @@
 
 - name: "Load default 'subject-c14n.xml' only for Shibboleth IdP v3.x"
   copy:
-   src: "files/conf/c14n/subject-c14n.xml"
+   src: "files/conf/c14n/subject-c14n-v3.xml"
    dest: "/opt/shibboleth-idp/conf/c14n/subject-c14n.xml"
    owner: "jetty"
    group: "root"
@@ -612,8 +612,21 @@
   notify:
    - "Restart Jetty"
 
+- name: "Load default 'subject-c14n.xml' only for Shibboleth IdP v4.x"
+  copy:
+   src: "files/conf/c14n/subject-c14n-v4.xml"
+   dest: "/opt/shibboleth-idp/conf/c14n/subject-c14n.xml"
+   owner: "jetty"
+   group: "root"
+   mode: "0600"
+  when:
+   - subject_c14n_xml.stat.exists == False
+   - "shib_idp_version is search('4.')"
+  notify:
+   - "Restart Jetty"
+
 # Load /opt/shibboleth-idp/conf/logback.xml
-- name: "Check if a custom 'logback.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'logback.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/logback.xml"
   delegate_to: 127.0.0.1
@@ -659,7 +672,7 @@
    - "Reload Logging"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-coco.xml
-- name: "Check if a custom 'attribute-filter-coco.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'attribute-filter-coco.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-coco.xml"
   delegate_to: 127.0.0.1
@@ -711,7 +724,7 @@
    - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/attribute-filter-rs.xml
-- name: "Check if a custom 'attribute-filter-rs.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'attribute-filter-rs.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/attribute-filter-rs.xml"
   delegate_to: 127.0.0.1
@@ -763,7 +776,7 @@
    - "Reload Attribute Filter"
 
 # Load /opt/shibboleth-idp/conf/audit.xml
-- name: "Check if a custom 'audit.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'audit.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/audit.xml"
   delegate_to: 127.0.0.1
@@ -809,7 +822,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/mvc-beans.xml
-- name: "Check if a custom 'mvc-beans.xml' is provided under {{ files_dir}}/{{ fqdn }}/idp/conf"
+- name: "Check if a custom 'mvc-beans.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/conf/mvc-beans.xml"
   delegate_to: 127.0.0.1
@@ -841,7 +854,7 @@
    - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/credentials/trustCertificates.crt
-- name: "Check if a custom 'trustCertificates.crt' is provided under {{ files_dir}}/{{ fqdn }}/idp/credentials"
+- name: "Check if a custom 'trustCertificates.crt' is provided under {{ files_dir }}/<FQDN>/idp/credentials"
   stat:
    path: "{{ files_dir }}/{{ fqdn }}/idp/credentials/trustCertificates.crt"
   delegate_to: 127.0.0.1
@@ -1036,13 +1049,33 @@
   when:
    - "shib_idp_version is search('4.')"
 
-- name: "Create Hard Links of 'sealer.jks' and 'sealer.kver' into '/var/local/backups'"
+- name: "Check if 'sealer.jks' hard link exists into '/var/local/backups'"
+  stat:
+   path: "/var/local/backups/sealer.jks"
+  register: sealer_jks_lnk
+  changed_when: false
+
+- name: "Create hard link of 'sealer.jks' into '/var/local/backups'"
   file:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
+   src: "/opt/shibboleth-idp/credentials/sealer.jks"
+   dest: "/var/local/backups/sealer.jks"
    state: hard
-  with_items:
-   - { src: "/opt/shibboleth-idp/credentials/sealer.jks", dest: "/var/local/backups/sealer.jks" }
-   - { src: "/opt/shibboleth-idp/credentials/sealer.kver", dest: "/var/local/backups/sealer.kver" }
   when:
    - "shib_idp_version is search('4.')"
+   - sealer_jks_lnk.stat.exists == False
+
+- name: "Check if 'sealer.kver' hard link exists into '/var/local/backups'"
+  stat:
+   path: "/var/local/backups/sealer.kver"
+  register: sealer_kver_lnk
+  changed_when: false
+
+- name: "Create hard link of 'sealer.kver' into '/var/local/backups'"
+  file:
+   src: "/opt/shibboleth-idp/credentials/sealer.kver"
+   dest: "/var/local/backups/sealer.kver"
+   state: hard
+  when:
+   - "shib_idp_version is search('4.')"
+   - sealer_kver_lnk.stat.exists == False
+
