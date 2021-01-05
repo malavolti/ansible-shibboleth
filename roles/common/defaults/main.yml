@@ -18,7 +18,7 @@ common:
   size_swapfile: "2048"
   state: present
  # Remove entirely "mirror" section to use the default distribution repositories
- mirror: "http://debian.mirror.garr.it/debian/"
+ mirror: "http://deb.debian.org/debian/"
  root_user_pw: "root_password"
 
 # NTP

@@ -1,9 +1,5 @@
 ---
 # tasks file for common
-- name: "Include OS-specific variables. 'host_vars' wins on this inclusion"
-  include_vars: "{{ ansible_os_family }}.yml"
-  tags: common
-
 - name: "Run 'apt-get update' if the last one is more than 3600 seconds ago"
   apt:
    update_cache: yes
