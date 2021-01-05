@@ -4,7 +4,7 @@
 
 * [Ansible](https://www.ansible.com/) - Tested with Ansible v2.9.1
 * [Shibboleth IdP source](https://shibboleth.net/downloads/identity-provider/latest/)
-* A Debian server/virtual machine where install the Shibboleth IdP v3.x (8 'jessie' or 9 'stretch')
+* A Debian server/virtual machine where install the Shibboleth IdP v3.x/v4.x (8 'jessie' or 9 'stretch')
 
 ## Simple flow to install and configure a Shibboleth IdP
 
@@ -32,7 +32,7 @@
     * `tar xzf /usr/local/src/shibboleth-identity-provider-3.3.2.tar.gz`
     * `rm -f /usr/local/src/shibboleth-identity-provider-3.3.2.tar.gz`
 
-6. Modify the following file to adapt "`createIdP/createIdP.py`" to your needs:
+6. Modify the following files to adapt "`createIdP/createIdP.py`" to your needs:
     * `createIdp/utils/langUtils.py`: to support new languages
     * `createIdp/utils/ymlUtils.py`: to create correctly the YAML file needed by Ansible
     * `createIdp/utils/idpUtils.py`: to change the IDP credentials creation
@@ -75,21 +75,19 @@ The "`shib-idp-servers.yml`", "`shib-idp-idm-servers.yml`" and "`shib-idp-idm-se
    - `remote_user`  (who will access via SSH on the servers)
    - `roles`        (what will be installed and configured on the servers)
 
-Each "`vars/`" directories contains (at least, for each role):
+Each "`vars/`" directories can contain (at least, for each role):
    - `Debian.yml`   (will contains all variables debian-oriented)
 
 The "`host_vars/`" directory contains one `FQDN.yml` file for each server and it contains specific variables for the host into the specific environment.
 (These files have to be encrypted (you can do this with Ansible Vault) if shared on GitHub or somewhere other)
 
 
-The "`roles/idp/vars/attr-defs-dict-java7.yml`" and "`roles/idp/vars/attr-defs-dict-java8.yml` contain all the attribute definitions supported by default on an IdP for Java 7 or 8. 
-If you need to limit or change the default Attribute Definitions provided, you have to implement your "`idp_attrDef`" dictionary on the IdP "*FQDN.yml*" file or modify the files directly.
-
+If you need to a different `attribute-resolver.xml`, insert it into `inventories/files/FQDN/idp/conf/attribute-resolver.xml` before run ansible.
 
 The default mirror site is "`http://deb.debian.org/debian/`". If you want to change it, add the variable "mirror" on your `inventories/#_environment_#/host_vars/FQDN.yml`.
 
 
-The openLDAP logs will be stored on "`/var/log/slapd/`" directory.
+The openLDAP logs will be stored on "`/var/log/slapd`" directory.
 
 
 The recipes can configure an IdP to be monitored through [Check_MK](https://mathias-kettner.de/check_mk.html).
