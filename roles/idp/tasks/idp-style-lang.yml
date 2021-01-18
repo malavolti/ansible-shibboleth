@@ -114,11 +114,11 @@
   with_items:
    - { src: "views/login-v3.vm.j2", dest: "/opt/shibboleth-idp/views/login.vm" }
    - { src: "views/logout-v3.vm.j2", dest: "/opt/shibboleth-idp/views/logout.vm" }
-   - { src: "views/logout-v3-complete.vm.j2", dest: "/opt/shibboleth-idp/views/logout-complete.vm" }
-   - { src: "views/logout-v3-propagate.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
+   - { src: "views/logout-complete-v3.vm.j2", dest: "/opt/shibboleth-idp/views/logout-complete.vm" }
+   - { src: "views/logout-propagate-v3.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
    - { src: "views/intercept/attribute-release-v3.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
   when:
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Apache"
 
@@ -136,7 +136,7 @@
    - { src: "views/logout-propagate-v4.vm.j2", dest: "/opt/shibboleth-idp/views/logout-propagate.vm" }
    - { src: "views/intercept/attribute-release-v4.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Apache"
 
@@ -163,7 +163,7 @@
   with_dict: "{{ idp_metadata }}"
   when: 
    - "item.key != 'en'"
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Apache"
 
@@ -177,7 +177,7 @@
   with_dict: "{{ idp_metadata }}"
   when: 
    - "item.key != 'en'"
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Apache"
 

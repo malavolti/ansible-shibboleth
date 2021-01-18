@@ -51,7 +51,7 @@
    group: "root"
    mode: "0600"
   when:
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
 
 #- name: "Put the JSTL libraries, needed for Shibboleth IdP Status page, in the right position"
 #  copy:

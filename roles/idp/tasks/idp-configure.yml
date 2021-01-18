@@ -104,7 +104,7 @@
    mode: "0600"
   when:
    - saml_nameid_properties.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -117,7 +117,7 @@
    mode: "0600"
   when:
    - saml_nameid_properties.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -202,7 +202,7 @@
    mode: "0600"
   when:
    - idp_properties.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -215,7 +215,7 @@
    mode: "0600"
   when:
    - idp_properties.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -248,7 +248,7 @@
    mode: "0600"
   when:
    - ldap_properties.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -261,7 +261,7 @@
    mode: "0600"
   when:
    - ldap_properties.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -273,9 +273,10 @@
    group: "root"
    mode: "0600"
   when:
-   - "shib_idp_version is search('4.')"
-  notify:
-   - "Restart Jetty"
+   - "shib_idp_version is search('^4.')"
+  #notify:
+  # - "Restart Jetty"
+  tags: test
 
 # Load /opt/shibboleth-idp/conf/services.properties
 - name: "Check if a custom 'services.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
@@ -326,7 +327,7 @@
    mode: "0600"
   when:
    - services_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -339,7 +340,7 @@
    mode: "0600"
   when:
    - services_xml.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -361,7 +362,7 @@
    group: "root"
    mode: "0600"
   when:
-   -  "shib_idp_version is search('3.')"
+   -  "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -373,7 +374,7 @@
    group: "root"
    mode: "0600"
   when:
-   -  "shib_idp_version is search('4.')"
+   -  "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -407,7 +408,7 @@
    mode: "0600"
   when:
    - attribute_resolver_xml.stat.exists == False
-   -  "shib_idp_version is search('3.3.')"
+   -  "shib_idp_version is search('^3.3.')"
   notify:
    - "Restart Jetty"
 
@@ -420,7 +421,7 @@
    mode: "0600"
   when:
    - attribute_resolver_xml.stat.exists == False
-   -  "shib_idp_version is search('3.4.')"
+   -  "shib_idp_version is search('^3.4.')"
   notify:
    - "Reload Attribute Resolver"
 
@@ -433,7 +434,7 @@
    mode: "0600"
   when:
    - attribute_resolver_xml.stat.exists == False
-   - "shib_idp_version is search('4.0.')"
+   - "shib_idp_version is search('^4.0.')"
   notify:
    - "Reload Attribute Resolver"
 
@@ -496,7 +497,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -514,7 +515,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -557,7 +558,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -575,7 +576,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -608,7 +609,7 @@
    mode: "0600"
   when:
    - subject_c14n_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -621,7 +622,7 @@
    mode: "0600"
   when:
    - subject_c14n_xml.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -654,7 +655,7 @@
    mode: "0600"
   when:
    - logback_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Reload Logging"
 
@@ -667,7 +668,7 @@
    mode: "0600"
   when:
    - logback_xml.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Reload Logging"
 
@@ -704,7 +705,7 @@
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_coco_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Reload Attribute Filter"
 
@@ -719,7 +720,7 @@
    - idp_config['sup_coco'] is defined
    - idp_config['sup_coco'] in ["Yes","yes","True","true"]
    - attribute_filter_coco_xml.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Reload Attribute Filter"
 
@@ -756,7 +757,7 @@
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_rs_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Reload Attribute Filter"
 
@@ -771,7 +772,7 @@
    - idp_config['sup_rs'] is defined
    - idp_config['sup_rs'] in ["Yes","yes","True","true"]
    - attribute_filter_rs_xml.stat.exists == False
-   -  "shib_idp_version is search('4.')"
+   -  "shib_idp_version is search('^4.')"
   notify:
    - "Reload Attribute Filter"
 
@@ -804,7 +805,7 @@
    mode: "0600"
   when:
    - audit_xml.stat.exists == False
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
   notify:
    - "Restart Jetty"
 
@@ -817,7 +818,7 @@
    mode: "0600"
   when:
    - audit_xml.stat.exists == False
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -905,7 +906,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('3.')"
+   - "shib_idp_version is search('^3.')"
 
 - name: "Configure Shibboleth IdP to support OpenLDAP Password Policy for Shibboleth IdP v4.x"
   copy:
@@ -923,7 +924,7 @@
    - idp_config['ldap']['ppolicy'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] is defined
    - idp_config['ldap']['ppolicy']['change_password_url'] != ""
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
 
 - name: "Be sure that 'change-password' directory is created"
   file:
@@ -1001,7 +1002,7 @@
    group: "root"
    mode: "0644"
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -1013,7 +1014,7 @@
    group: "root"
    mode: "0644"
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -1025,7 +1026,7 @@
    group: "root"
    mode: "0644"
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
   notify:
    - "Restart Jetty"
 
@@ -1037,7 +1038,7 @@
    group: "root"
    mode: "0755"
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
 
 - name: "Create 'updateIDPsecret' cron"
   copy:
@@ -1047,7 +1048,7 @@
    group: "root"
    mode: "0755"
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
 
 - name: "Check if 'sealer.jks' hard link exists into '/var/local/backups'"
   stat:
@@ -1061,7 +1062,7 @@
    dest: "/var/local/backups/sealer.jks"
    state: hard
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
    - sealer_jks_lnk.stat.exists == False
 
 - name: "Check if 'sealer.kver' hard link exists into '/var/local/backups'"
@@ -1076,6 +1077,6 @@
    dest: "/var/local/backups/sealer.kver"
    state: hard
   when:
-   - "shib_idp_version is search('4.')"
+   - "shib_idp_version is search('^4.')"
    - sealer_kver_lnk.stat.exists == False
 
