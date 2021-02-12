@@ -1,18 +1,49 @@
 ---
 # tasks file for idm-configure
 
-- name: "Be sure to copy needed PLA changed libraries"
-  copy:
+- name: "Be sure to patch files of phpLDAPadmin"
+  patch:
    src: "{{ item.src }}"
    dest: "{{ item.dest }}"
+  with_items:
+   - { src: "files/phpldapadmin/lib/page.php.patch", dest: "/opt/phpldapadmin/lib/page.php" }
+   - { src: "files/phpldapadmin/lib/TemplateRender.php.patch", dest: "/opt/phpldapadmin/lib/TemplateRender.php" }
+  changed_when: False
+
+- name: "Check if pageOrig exists"
+  stat:
+   path: "/opt/phpldapadmin/lib/pageOrig.php"
+  register: pageOrig
+
+- name: "Check if TemplateRenderOrig exists"
+  stat:
+   path: "/opt/phpldapadmin/lib/TemplateRenderOrig.php"
+  register: TemplateRenderOrig
+
+- name: "Rename page to pageOrig"
+  command: "mv /opt/phpldapadmin/lib/page.php /opt/phpldapadmin/lib/pageOrig.php"
+  when: pageOrig.stat.exists == false
+
+- name: "Rename TemplateRender to TemplateRenderOrig"
+  command: "mv /opt/phpldapadmin/lib/TemplateRender.php /opt/phpldapadmin/lib/TemplateRenderOrig.php"
+  when: TemplateRenderOrig.stat.exists == false
+
+- name: "Be sure to copy the new page.php"
+  copy:
+   src: "files/phpldapadmin/lib/page.php"
+   dest: "/opt/phpldapadmin/lib/page.php"
    owner: "root"
    group: "root"
-   mode: "{{ item.mode }}"
-  with_items:
-   - { src: "files/phpldapadmin/lib/page.php", dest: "/opt/phpldapadmin/lib/page.php", mode: "0644" }
-   - { src: "files/phpldapadmin/lib/pageOrig.php", dest: "/opt/phpldapadmin/lib/pageOrig.php", mode: "0644" }
-   - { src: "files/phpldapadmin/lib/TemplateRender.php", dest: "/opt/phpldapadmin/lib/TemplateRender.php", mode: "0644" }
-   - { src: "files/phpldapadmin/lib/TemplateRenderOrig.php", dest: "/opt/phpldapadmin/lib/TemplateRenderOrig.php", mode: "0644" }
+   mode: "0644"
+  changed_when: False
+
+- name: "Be sure to copy the new TemplateRender.php"
+  copy:
+   src: "files/phpldapadmin/lib/TemplateRender.php"
+   dest: "/opt/phpldapadmin/lib/TemplateRender.php"
+   owner: "root"
+   group: "root"
+   mode: "0644"
   changed_when: False
 
 - name: "Be sure to copy needed PLA changed javascripts"
@@ -62,8 +93,8 @@
 
 - name: "Be sure to update configuration of phpLDAPadmin"
   template:
-   src: phpldapadmin/config/config.php.j2
-   dest: /opt/phpldapadmin/config/config.php
+   src: "phpldapadmin/config/config.php.j2"
+   dest: "/opt/phpldapadmin/config/config.php"
    owner: "root"
    group: "www-data"
   changed_when: False

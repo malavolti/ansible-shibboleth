@@ -32,15 +32,6 @@
   changed_when: false
   tags: pla
 
-- name: "Remove any 'phpldapadmin.conf' file into '/etc/apache2/conf-enabled'"
-  file:
-   path: "/etc/apache2/conf-enabled/phpldapadmin.conf"
-   state: absent
-  when: pla_apache.stat.isreg is defined and pla_apache.stat.isreg
-  notify:
-   - "Restart Apache"
-  tags: pla
-
 - name: "Be sure to change '/phpldapadmin' into '/idm' to prevent random login attempts"
   copy:
    src: "files/apache2/conf-available/phpldapadmin.conf"
