@@ -139,3 +139,10 @@
    - common['swap']['size_swapfile'] is defined and common['swap']['size_swapfile'] != ''
    - common['swap']['state'] is defined and (common['swap']['state'] == 'present' or common['swap']['state'] == 'absent')
   tags: common
+
+- name: "Assign the right privileges to the /tmp directory"
+  file:
+   path: "/tmp"
+   state: directory
+   mode: "u+rwx,g+rwx,o+rwt"
+  tags: common
