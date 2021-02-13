@@ -28,13 +28,13 @@
    - rsyslog_srv['port'] is defined
    - rsyslog_srv['port'] != ""
 
-- name: "Debian 9 - Install Rsyslog with RELP"
+- name: "Install Rsyslog with RELP"
   apt:
    name: ['rsyslog', 'rsyslog-relp']
    state: latest
    install_recommends: no
   when:
-   - ansible_distribution_release == "stretch"
+   - ansible_distribution_release != "jessie"
    - rsyslog_srv is defined
    - rsyslog_srv['ip'] is defined
    - rsyslog_srv['ip'] != ""

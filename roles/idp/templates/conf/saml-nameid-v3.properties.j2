@@ -25,16 +25,17 @@ idp.persistentId.sourceAttribute = {{ idp_config['idp_sourceAttribute'] }}
 #idp.persistentId.algorithm = SHA
 idp.persistentId.salt = {{ idp_config['idp_persistentId_salt'] }}
 
+{% if idp_config['idp_persistentId_type'] == 'computed' %}
 # To use a database, use shibboleth.StoredPersistentIdGenerator
 idp.persistentId.generator = shibboleth.ComputedPersistentIdGenerator
-#idp.persistentId.generator = shibboleth.StoredPersistentIdGenerator
+{% elif idp_config['idp_persistentId_type'] == 'stored' %}
+idp.persistentId.generator = shibboleth.StoredPersistentIdGenerator
 
 # For basic use, set this to a JDBC DataSource bean name:
-#idp.persistentId.dataSource = PersistentIdDataSource
-#idp.persistentId.dataSource = MyDataSource
+idp.persistentId.dataSource = MyDataSource
+{% endif %}
 
 # For advanced use, set to a bean inherited from shibboleth.JDBCPersistentIdStore
 #idp.persistentId.store = MyPersistentIdStore
 # Set to an empty property to skip hash-based generation of first stored ID
-#idp.persistentId.computed = shibboleth.ComputedPersistentIdGenerator
 idp.persistentId.computed = shibboleth.ComputedPersistentIdGenerator

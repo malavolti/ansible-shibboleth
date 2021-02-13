@@ -40,18 +40,12 @@
    group: "root"
    mode: "0600"
 
-- name: "Store in the 'shib_db' ansible variable the result of the check on the existance of the 'shibboleth' database"
-  command: mysql -h {{ idp_config['shibboleth_db_host'] }} -u shibboleth -p{{ idp_config['shibboleth_db_password'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='shibboleth'"
-  register: shib_db
-  changed_when: false
-
-- name: "Create the persistent identifiers 'shibboleth' database"
-  mysql_db:
-   encoding: "utf8"
-   state: import
-   name: all
-   target: "/root/shib-idp-persistentId-db.sql"
-  when: shib_db.stdout != 'shibboleth'
+- name: "Setup Database for Stored Persistent-id"
+  import_tasks: stored-pid-install.yml
+  when: 
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
 
 - name: "Load fake RS SP Metadata in the '/metadata' directory"
   copy:
@@ -173,6 +167,20 @@
   notify:
    - "Restart Jetty"
 
+- name: "Load default 'global.xml' provided by a template"
+  template:
+   src: "conf/global.xml.j2"
+   dest: "/opt/shibboleth-idp/conf/global.xml"
+   owner: "jetty"
+   group: "root"
+   mode: "0600"
+  when:
+   - global_xml.stat.exists == False
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined or idp_config['storage_memcache_hosts'] is defined
+  notify:
+   - "Restart Jetty"
+
 # Load /opt/shibboleth-idp/conf/idp.properties
 - name: "Check if a custom 'idp.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
@@ -274,9 +282,8 @@
    mode: "0600"
   when:
    - "shib_idp_version is search('^4.')"
-  #notify:
-  # - "Restart Jetty"
-  tags: test
+  notify:
+   - "Restart Jetty"
 
 # Load /opt/shibboleth-idp/conf/services.properties
 - name: "Check if a custom 'services.properties' is provided under {{ files_dir }}/<FQDN>/idp/conf"
@@ -610,6 +617,9 @@
   when:
    - subject_c14n_xml.stat.exists == False
    - "shib_idp_version is search('^3.')"
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
   notify:
    - "Restart Jetty"
 
@@ -623,6 +633,9 @@
   when:
    - subject_c14n_xml.stat.exists == False
    - "shib_idp_version is search('^4.')"
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
   notify:
    - "Restart Jetty"
 

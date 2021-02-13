@@ -106,7 +106,7 @@
         <ref bean="c14n/SAML1CryptoTransient" /> 
         
         <!-- Handle a SAML 2 persistent ID, provided a stored strategy is in use. -->
-        <!-- <ref bean="c14n/SAML2Persistent" /> -->
+        <ref bean="c14n/SAML2Persistent" />
         
         <!--
         Finally we have beans for decoding arbitrary SAML formats directly. By default, these are turned off,

@@ -5,26 +5,39 @@
    update_cache: yes
    cache_valid_time: 3600
 
+- name: "Install packages needed by /statistics application"
+  apt:
+   name: ['python-mysqldb','php','php-xml']
+   state: latest
+   install_recommends: no
+  when:
+   - ansible_distribution_release != "jessie"
+
 - name: "Debian 8 - Install packages needed by /statistics application"
   apt:
-   name: ['python-mysqldb', 'php5-mysql', 'php5']
+   name: ['php5-mysql', 'php5']
    state: latest
    install_recommends: no
   when:
    - ansible_distribution_release == "jessie"
 
-- name: "Debian 9 - Install packages needed by /statistics application"
-  apt:
-   name: ['python-mysqldb', 'php7.0-mysql', 'php7.0-xml', 'php7.0']
-   state: latest
-   install_recommends: no
-  when:
-   - ansible_distribution_release == "stretch"
-
-- name: "Check if 'statistics' DB is already created and store the result into 'statistics_db' ansible variable"
+- name: "Check if 'statistics' DB is already created on {{ idp_stats['db_host'] }} and store the result into 'statistics_db' ansible variable"
   command: mysql --host={{ idp_stats['db_host'] }} --user=statistics --password={{ idp_stats['db_pw'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='statistics'"
   register: statistics_db
   changed_when: false
+  when:
+   - idp_stats is defined
+   - idp_stats['db_host'] is defined and idp_stats['db_pw'] is defined
+   - idp_stats['db_host'] != 'localhost'
+
+- name: "Check if 'statistics' DB is already created on localhost and store the result into 'statistics_db' ansible variable"
+  command: mysql -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='statistics'"
+  register: statistics_db
+  changed_when: false
+  when:
+   - idp_stats is defined
+   - idp_stats['db_host'] is defined and idp_stats['db_pw'] is defined
+   - idp_stats['db_host'] == 'localhost'
 
 - name: "Create 'loganalysis' directory"
   file:
