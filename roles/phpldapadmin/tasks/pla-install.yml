@@ -38,9 +38,15 @@
   notify:
    - "Restart Apache"
 
+- name: "Check if pageOrig exists"
+  stat:
+   path: "/opt/phpldapadmin/lib/pageOrig.php"
+  register: pageOrig
+
 - name: "Clone the phpLDAPadmin repository"
   git:
    repo: "https://github.com/malavolti/phpLDAPadmin.git"
    dest: /opt/phpldapadmin
   notify:
    - "Restart Apache"
+  when: pageOrig.stat.exists == false

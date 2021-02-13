@@ -1,15 +1,6 @@
 ---
 # tasks file for idm-configure
 
-- name: "Be sure to patch files of phpLDAPadmin"
-  patch:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
-  with_items:
-   - { src: "files/phpldapadmin/lib/page.php.patch", dest: "/opt/phpldapadmin/lib/page.php" }
-   - { src: "files/phpldapadmin/lib/TemplateRender.php.patch", dest: "/opt/phpldapadmin/lib/TemplateRender.php" }
-  changed_when: False
-
 - name: "Check if pageOrig exists"
   stat:
    path: "/opt/phpldapadmin/lib/pageOrig.php"
@@ -19,6 +10,18 @@
   stat:
    path: "/opt/phpldapadmin/lib/TemplateRenderOrig.php"
   register: TemplateRenderOrig
+
+- name: "Be sure to patch phpLDAPadmin page.php file"
+  patch:
+   src: "files/phpldapadmin/lib/page.php.patch"
+   dest: "/opt/phpldapadmin/lib/page.php"
+  when: pageOrig.stat.exists == false
+
+- name: "Be sure to patch phpLDAPadmin TemplateRender.php file"
+  patch:
+   src: "files/phpldapadmin/lib/TemplateRender.php.patch"
+   dest: "/opt/phpldapadmin/lib/TemplateRender.php"
+  when: TemplateRenderOrig.stat.exists == false
 
 - name: "Rename page to pageOrig"
   command: "mv /opt/phpldapadmin/lib/page.php /opt/phpldapadmin/lib/pageOrig.php"
@@ -61,12 +64,10 @@
    - { src: "files/phpldapadmin/htdocs/js/jquery-ui-1.9.1.min.js", dest: "/opt/phpldapadmin/htdocs/js/jquery-ui-1.9.1.min.js", mode: "0644" }
    - { src: "files/phpldapadmin/htdocs/js/livevalidation_standalone.compressed.js", dest: "/opt/phpldapadmin/htdocs/js/livevalidation_standalone.compressed.js", mode: "0644" }
 
-- name: "Be sure to patch files of phpLDAPadmin"
+- name: "Be sure to patch phpLDAPadmin 'create.php' file"
   patch:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
-  with_items:
-   - { src: "files/phpldapadmin/htdocs/create-idpcloud.patch" ,dest: "/opt/phpldapadmin/htdocs/create.php" }
+   src: "files/phpldapadmin/htdocs/create-idpcloud.patch"
+   dest: "/opt/phpldapadmin/htdocs/create.php"
   changed_when: False
 
 - name: "Be sure to copy 'checkValue.php' on phpldapadmin/htdocs"

@@ -4,7 +4,7 @@
   import_tasks: "pla-install.yml"
   tags: pla
 
-- name: "Be sure to load a basic configuration of phpLDAPadmin"
+- name: "Be sure to load the phpLDAPadmin config.php file"
   template:
    src: "config/config.php.j2"
    dest: "/opt/phpldapadmin/config/config.php"
