@@ -8,18 +8,6 @@
     name: ['python-dev', 'python-setuptools', 'python-mysqldb', 'default-libmysqlclient-dev', 'sqlite3', 'libxml2-dev', 'libxslt-dev', 'libldap2-dev', 'libsasl2-dev', 'git', 'build-essential', 'apache2', 'libapache2-mod-wsgi','python-pip']
     state: latest
 
-- name: "Check that PIP is not already installed"
-  stat:
-   path: "/usr/local/bin/pip"
-  register: pip_installed
-
-- name: "Install pip"
-  easy_install:
-   name: pip
-   state: latest
-  when:
-   - pip_installed.stat.exists == False
-  
 - name: "Install virtualenv"
   pip:
     name: virtualenv
