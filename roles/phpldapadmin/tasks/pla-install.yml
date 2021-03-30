@@ -7,7 +7,7 @@
 
 - name: "Be sure that phpLDAPadmin required packages are installed"
   apt:
-   name: ['apache2-utils', 'python-passlib', 'gettext', 'php']
+   name: ['gettext', 'php']
    state: latest
    install_recommends: no 
   notify:
@@ -38,10 +38,10 @@
   notify:
    - "Restart Apache"
 
-- name: "Check if pageOrig exists"
+- name: "Check if phpldapadmin dir exists"
   stat:
-   path: "/opt/phpldapadmin/lib/pageOrig.php"
-  register: pageOrig
+   path: "/opt/phpldapadmin"
+  register: pla_dir
 
 - name: "Clone the phpLDAPadmin repository"
   git:
@@ -49,4 +49,4 @@
    dest: /opt/phpldapadmin
   notify:
    - "Restart Apache"
-  when: pageOrig.stat.exists == false
+  when: pla_dir.stat.exists == False
