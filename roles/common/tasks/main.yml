@@ -1,5 +1,6 @@
 ---
 # tasks file for common
+
 - name: "Run 'apt-get update' if the last one is more than 3600 seconds ago"
   apt:
    update_cache: yes
