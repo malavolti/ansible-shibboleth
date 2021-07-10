@@ -13,6 +13,17 @@
   when:
    - check_mk is defined
    - check_mk['srv'] is defined
+   - ansible_distribution_major_version|int <= 9
+
+- name: "Install needed packages for Check MK plugin (Python 3)"
+  apt:
+   name: ["python3-ldap","python3-pymysql"]
+   state: latest
+   install_recommends: no
+  when:
+   - check_mk is defined
+   - check_mk['srv'] is defined
+   - ansible_distribution_major_version|int > 9
 
 - name: "Create '/local' directory needed by Check_MK plugin for customized local probes"
   file:
@@ -48,6 +59,35 @@
    - ldap is defined
    - ldap['create_test_user'] is defined
    - ldap['create_test_user'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int <= 9
+  notify:
+   - "Add probes to Check_MK centralized server"
+
+- name: "Put 'check_aacli' and 'check_ldap' (Python 3) probe in the Check_MK plugin '/local' directory"
+  template:
+   src: "{{ item['src'] }}"
+   dest: "{{ item['dest'] }}"
+   owner: "root"
+   group: "root"
+   mode: "0755"
+  with_items:
+   - { src: "monitoring/check_mk_plugins/check_aacli_py3.py.j2", dest: "/usr/lib/check_mk_agent/local/check_aacli.py" }
+   - { src: "monitoring/check_mk_plugins/check_ldap_py3.py.j2", dest: "/usr/lib/check_mk_agent/local/check_ldap.py" }
+  when:
+   - check_mk is defined
+   - check_mk['srv'] is defined and check_mk['srv'] != ''
+   - check_mk['spEntityID'] is defined and check_mk['spEntityID'] != ''
+   - check_mk['testuser'] is defined and check_mk['testuser'] != ''
+   - check_mk['baseDN'] is defined and check_mk['baseDN'] != ''
+   - check_mk['searchuser'] is defined and check_mk['searchuser'] != ''
+   - check_mk['searchuser_pw'] is defined and check_mk['searchuser_pw'] != ''
+   - check_mk['ldap_url'] is defined and check_mk['ldap_url'] != ''
+   - check_mk['userid_attr'] is defined and check_mk['userid_attr'] != ''
+   - check_mk['idp_scope'] is defined and check_mk['idp_scope'] != ''
+   - ldap is defined
+   - ldap['create_test_user'] is defined
+   - ldap['create_test_user'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int > 9
   notify:
    - "Add probes to Check_MK centralized server"
 
@@ -61,6 +101,21 @@
   when:
    - check_mk is defined
    - check_mk['srv'] is defined
+   - ansible_distribution_major_version|int <= 9
+  notify:
+   - "Add probes to Check_MK centralized server"
+
+- name: "Put 'check_mysql' (Python 3) probe in the Check_MK plugin '/local' directory"
+  template:
+   src: "monitoring/check_mk_plugins/check_mysql_py3.py.j2"
+   dest: "/usr/lib/check_mk_agent/local/check_mysql.py"
+   owner: "root"
+   group: "root"
+   mode: "0755"
+  when:
+   - check_mk is defined
+   - check_mk['srv'] is defined
+   - ansible_distribution_major_version|int > 9
   notify:
    - "Add probes to Check_MK centralized server"
 
@@ -76,6 +131,23 @@
    - check_mk['srv'] is defined
    - check_mk['check_rs'] is defined
    - check_mk['check_rs'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int <= 9
+  notify:
+   - "Add probes to Check_MK centralized server"
+
+- name: "Put 'check_rs' (Python 3) probe in the Check_MK plugin '/local' directory"
+  template:
+   src: "monitoring/check_mk_plugins/check_rs_py3.py.j2"
+   dest: "/usr/lib/check_mk_agent/local/check_rs.py"
+   owner: "root"
+   group: "root"
+   mode: "0755"
+  when:
+   - check_mk is defined
+   - check_mk['srv'] is defined
+   - check_mk['check_rs'] is defined
+   - check_mk['check_rs'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int > 9
   notify:
    - "Add probes to Check_MK centralized server"
 
@@ -103,6 +175,23 @@
    - check_mk['srv'] is defined
    - check_mk['check_coco'] is defined
    - check_mk['check_coco'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int <= 9
+  notify:
+   - "Add probes to Check_MK centralized server"
+
+- name: "Put 'check_coco' (Python 3) probe in the Check_MK plugin '/local' directory"
+  template:
+   src: "monitoring/check_mk_plugins/check_coco_py3.py.j2"
+   dest: "/usr/lib/check_mk_agent/local/check_coco.py"
+   owner: "root"
+   group: "root"
+   mode: "0755"
+  when:
+   - check_mk is defined
+   - check_mk['srv'] is defined
+   - check_mk['check_coco'] is defined
+   - check_mk['check_coco'] in ["Yes","yes","True","true"]
+   - ansible_distribution_major_version|int > 9
   notify:
    - "Add probes to Check_MK centralized server"
 
