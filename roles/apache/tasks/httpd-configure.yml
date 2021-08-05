@@ -68,7 +68,7 @@
    - "Restart Apache"
 
 - name: "Disable Apache Default HTTP VirtualHost"
-  shell: "a2ensite -q 000-default"
+  shell: "a2dissite -q 000-default"
   when: ssl_site_apache.stat.exists == False
   notify:
    - "Restart Apache"
