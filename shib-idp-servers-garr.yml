@@ -11,7 +11,7 @@
    - jetty
    - mysql
    - idp
+   - idpcloud_garr
    - check_mk_agent
-   - rsync-backup-user
    - sys-update
   serial: 3
