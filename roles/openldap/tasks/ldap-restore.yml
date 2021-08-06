@@ -1,7 +1,7 @@
 ---
 # Tasks for openLDAP Restoration
 - name: "RESTORE - Retrieve LDAP backup into {{ files_dir }}/{{ fqdn }}/openldap/restore/ldap-users.ldif.gz"
-  command: "rsync -avzh {{ bck_uri }}/{{ fqdn }}/{{ host_bck_path }}/ldap-users.ldif.gz {{ files_dir }}/{{ fqdn }}/openldap/restore/ldap-users.ldif.gz"
+  command: "rsync -avzh -e 'ssh -i {{ lookup('env','HOME') }}/.ssh/idpbakuser_rsa' {{ bck_uri }}/{{ fqdn }}/{{ host_bck_path }}/ldap-users.ldif.gz {{ files_dir }}/{{ fqdn }}/openldap/restore/ldap-users.ldif.gz"
   delegate_to: 127.0.0.1
   when:
     - bck_uri is defined
@@ -82,4 +82,13 @@
   command: "ansible-vault encrypt --vault-password-file {{ vault_file }} {{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
   delegate_to: 127.0.0.1
   when: "'ANSIBLE_VAULT' in host_yaml.stdout"
+  tags: restore
+
+- name: "RESTORE - Be sure to set the right owner and group of YML file"
+  file:
+   path: "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
+   owner: "{{ lookup('env','USER') }}"
+   group: "{{ lookup('env','USER') }}"
+   state: file
+  delegate_to: 127.0.0.1
   tags: restore
