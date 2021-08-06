@@ -47,6 +47,7 @@
   git:
    repo: "https://github.com/malavolti/phpLDAPadmin.git"
    dest: /opt/phpldapadmin
+   version: "1.2.6.2"
   notify:
    - "Restart Apache"
   when: pla_dir.stat.exists == False
