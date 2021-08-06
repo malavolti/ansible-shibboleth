@@ -5,3 +5,4 @@ httpd_packages:
   - apache2
   - apache2-utils
   - python-passlib
+  - python3-passlib

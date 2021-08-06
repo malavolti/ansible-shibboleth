@@ -69,14 +69,6 @@
    - idp_config['idp_persistentId_type'] is defined
    - idp_config['idp_persistentId_type'] == "stored"
 
-#- name: "Put the JSTL libraries, needed for Shibboleth IdP Status page, in the right position"
-#  copy:
-#   src: "files/jstl-1.2.jar"
-#   dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/jstl-1.2.jar"
-#   owner: "root"
-#   group: "root"
-#   mode: 0644
-
 - name: "Create link for commons-dbcp, commons-pool and mysql JAR files used by Shibboleth IdP"
   file:
    src: "{{ item.src }}" 
@@ -87,6 +79,10 @@
   with_items:
    - { src: '/usr/share/java/commons-dbcp.jar' ,dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/commons-dbcp.jar" }
    - { src: '/usr/share/java/commons-pool.jar' ,dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/commons-pool.jar" }
+  when:
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
 
 - name: "Create link for MySQL Connector JAR files used by Shibboleth IdP"
   file:
@@ -97,7 +93,11 @@
    state: link
   with_items:
    - { src: '/usr/share/java/mysql.jar' ,dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/mysql-connector-java.jar" }
-  when: ansible_distribution_release == 'jessie' or ansible_distribution_release == 'stretch'
+  when: 
+   - ansible_distribution_release == 'jessie' or ansible_distribution_release == 'stretch'
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
 
 - name: "Create link for MariaDB Connector JAR files used by Shibboleth IdP"
   file:
@@ -111,6 +111,9 @@
   when: 
    - ansible_distribution_release != 'jessie'
    - ansible_distribution_release != 'stretch'
+   - idp_config is defined
+   - idp_config['idp_persistentId_type'] is defined
+   - idp_config['idp_persistentId_type'] == "stored"
 
 - name: "Install Shibboleth IdP"
   shell: "./install.sh -Didp.property.file=/tmp/installer.properties"

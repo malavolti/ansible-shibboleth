@@ -3,6 +3,21 @@
 
 - name: "Configure IdM of IdP-in-the-Cloud"
   import_tasks: "idm-configure.yml"
+  when: 
+   - ldap is defined
+   - pla is defined
+   - ldap['url'] is defined and ldap['url']|length > 0 
+   - pla['ldap']['url'] is defined and pla['ldap']['url']|length > 0 
+  tags: idpcloud_garr
+
+- name: "Set the 'read' permission to sealer JKS and KVER for 'other' to be able to backup them with rsync-backup user"
+  file:
+   path: "{{ item }}"
+   mode: o=r
+   state: file
+  loop:
+   - "/opt/shibboleth-idp/credentials/sealer.jks"
+   - "/opt/shibboleth-idp/credentials/sealer.kver"
   tags: idpcloud_garr
 
 - name: "Add 'rsync-backup' user needed by rsnapshot server"

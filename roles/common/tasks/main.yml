@@ -1,6 +1,15 @@
 ---
 # tasks file for common
 
+- name: "Configure the nameservers in the resolver"
+  template:
+   src: resolv.conf.j2
+   dest: /etc/resolv.conf
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  tags: common
+
 - name: "Run 'apt-get update' if the last one is more than 3600 seconds ago"
   apt:
    update_cache: yes
@@ -21,15 +30,6 @@
    name: "{{ fqdn }}"
   tags: common
 
-- name: "Configure the nameservers in the resolver"
-  template:
-   src: resolv.conf.j2
-   dest: /etc/resolv.conf
-   owner: "root"
-   group: "root"
-   mode: "0644"
-  tags: common
-
 - name: "Add root user's password"
   user:
    name: "root"
@@ -39,8 +39,7 @@
 - name: "Disable Root SSH Login access"
   lineinfile:
    dest: "/etc/ssh/sshd_config"
-   regexp: "^PermitRootLogin"
-   insertafter: "^#PermitRootLogin prohibit-password"
+   regexp: "^(# *)?PermitRootLogin "
    line: "PermitRootLogin no"
    state: present
   notify: 
@@ -130,7 +129,9 @@
    - common is defined
    - common['ssl'] is defined
    - common['ssl'] in ["True","true","Yes","yes"]
-  tags: common
+  tags:
+   - common
+   - ssl_update
 
 - name: "Manage SWAP file if needed"
   import_tasks: "manage_swapfile.yml"

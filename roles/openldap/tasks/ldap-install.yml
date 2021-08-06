@@ -11,6 +11,13 @@
    state: latest
    install_recommends: no
 
+- name: "Install 'python3-ldap' if Debian OS version > 9"
+  apt:
+   name: 'python3-ldap'
+   state: latest
+   install_recommends: no
+  when: ansible_distribution_major_version|int > 9
+
 - name: "Check if debconf-get-selections has parameters for unattended OpenLDAP installation and store the result on 'debconf' ansible variable"
   shell: (debconf-get-selections | grep -q -s slapd); echo $?
   register: debconf

@@ -100,6 +100,51 @@
    group: "www-data"
   changed_when: False
 
+- name: "Check if the template used to create user is provided"
+  stat:
+   path: "/opt/phpldapadmin/lib/TemplateRenderOrig.php"
+  register: TemplateRenderOrig
+
+# Load /opt/phpldapadmin/templates/creation/custom_idpAccount.xml
+- name: "Check if 'creation/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml' is provided under {{ files_dir }}/<FQDN>/idpcloud_garr/phpldapadmin/templates"
+  stat:
+   path: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/phpldapadmin/templates/creation/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml"
+  delegate_to: 127.0.0.1
+  register: customPLAcreationTemplate
+  changed_when: false
+
+- name: "Load custom 'creation/custom_idpAccount.xml' provided"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/phpldapadmin/templates/creation/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml"
+   dest: "/opt/phpldapadmin/templates/creation/custom_idpAccount.xml"
+   owner: "root"
+   group: "www-data"
+   mode: "0640"
+  when:
+   - customPLAcreationTemplate.stat.exists == True
+  notify:
+   - "Restart Apache"
+
+# Load /opt/phpldapadmin/templates/modification/custom_idpAccount.xml
+- name: "Check if 'modification/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml' is provided under {{ files_dir }}/<FQDN>/idpcloud_garr/phpldapadmin/templates"
+  stat:
+   path: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/phpldapadmin/templates/modification/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml"
+  delegate_to: 127.0.0.1
+  register: customPLAmodificationTemplate
+  changed_when: false
+
+- name: "Load custom 'modification/custom_idpAccount.xml' provided"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/phpldapadmin/templates/modification/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml"
+   dest: "/opt/phpldapadmin/templates/modification/custom_idpAccount.xml"
+   owner: "root"
+   group: "www-data"
+   mode: "0640"
+  when:
+   - customPLAmodificationTemplate.stat.exists == True
+  notify:
+   - "Restart Apache"
+
 - name: "Be sure to add creation/modification PLA templates"
   template:
    src: "{{ item.src }}"
@@ -110,6 +155,10 @@
   with_items:
    - { src: "phpldapadmin/templates/creation/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml.j2", dest: "/opt/phpldapadmin/templates/creation/custom_idpAccount.xml", mode: "0640" }
    - { src: "phpldapadmin/templates/modification/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml.j2", dest: "/opt/phpldapadmin/templates/modification/custom_idpAccount.xml", mode: "0640" }
+  when:
+   - customPLAmodificationTemplate.stat.exists == False
+  notify:
+   - "Restart Apache"
  
 - name: "Be sure to enrich phpLDAPadmin with IdP-in-the-Cloud italian templates translation"
   copy:
@@ -150,14 +199,6 @@
   register: idm_tools_apache
   changed_when: false
 
-- name: "Remove any 'idm-tools.conf' file into '/etc/apache2/conf-enabled'"
-  file:
-   path: "/etc/apache2/conf-enabled/idm-tools.conf"
-   state: absent
-  when: idm_tools_apache.stat.isreg is defined and idm_tools_apache.stat.isreg
-  notify:
-   - "Restart Apache"
-
 - name: "Load Apache IDM-TOOLS conf"
   copy:
    src: "files/apache2/conf-available/idm-tools.conf"
@@ -177,42 +218,6 @@
     block: |
       Include conf-available/idm-tools.conf
   when: idm_tools_apache.stat.islnk is not defined
-  notify:
-   - "Restart Apache"
-
-- name: "Check if Apache STATISTICS conf is already enabled"
-  stat:
-   path: "/etc/apache2/conf-enabled/statistics.conf"
-  register: stats_apache
-  changed_when: false
-
-- name: "Remove any 'statistics.conf' file into '/etc/apache2/conf-enabled'"
-  file:
-   path: "/etc/apache2/conf-enabled/statistics.conf"
-   state: absent
-  when: stats_apache.stat.isreg is defined and stats_apache.stat.isreg
-  notify:
-   - "Restart Apache"
-
-- name: "Load Apache STATISTICS conf"
-  copy:
-   src: "files/apache2/conf-available/statistics.conf"
-   dest: "/etc/apache2/conf-available/statistics.conf"
-   owner: "root"
-   group: "root"
-   mode: "0644"
-  when: stats_apache.stat.islnk is not defined
-  notify:
-   - "Restart Apache"
-
-- name: "Add STATISTICS support to Apache HTTPS VirtualHost"
-  blockinfile:
-    path: "/etc/apache2/sites-available/{{ fqdn }}-ssl.conf"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - STATISTICS"
-    insertbefore: "</VirtualHost>"
-    block: |
-      Include conf-available/statistics.conf
-  when: stats_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
 
@@ -238,3 +243,11 @@
    dest: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
    state: hard
   when: updates_txt.stat.exists == False
+
+- name: "Be sure to add the Test User - INDIRE IdP"
+  ldap_attr:
+   dn: "uid=testuser,ou=people,{{ ldap['basedn'] }}"
+   name: "schacHomeOrganization"
+   values: "{{ idp_config['scope'] }}"
+   state: present
+  when: ansible_fqdn in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it']

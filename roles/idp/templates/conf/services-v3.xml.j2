@@ -85,6 +85,13 @@
         In all cases you should review the "idp.httpclient.*" properties defined in services.properties
     -->
 
+    {% if ((idp_config['url_attribute_filter'] is defined) and (idp_config['url_attribute_filter'] != '')) %}
+    <bean id="AttributeFilterByUrl" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
+          c:client-ref="shibboleth.FileCachingHttpClient"
+          c:url="{{ idp_config['url_attribute_filter'] }}"
+          c:backingFile="/opt/shibboleth-idp/conf/attribute-filter-custom.xml"/>
+    {% endif %}
+
     <!--
     Otherwise by default we look at resources whose names are derived from %{idp.home}. Services not configured
     using native Spring syntax also need to load the property-placeholder file in order to pull settings from
@@ -114,13 +121,11 @@
     </util:list>
 
     <util:list id ="shibboleth.AttributeFilterResources">
-        <value>%{idp.home}/conf/attribute-filter.xml</value>
-        <value>%{idp.home}/conf/attribute-filter-federation.xml</value>
-{% if idp_config is defined and idp_config['sup_rs'] in ['Yes','yes','True','true'] %}
-        <value>%{idp.home}/conf/attribute-filter-rs.xml</value>
-{% endif %}
-{% if idp_config is defined and idp_config['sup_coco'] in ['Yes','yes','True','true'] %}
-        <value>%{idp.home}/conf/attribute-filter-coco.xml</value>
+        <!--<value>%{idp.home}/conf/attribute-filter.xml</value>-->
+{% if ((idp_config['url_attribute_filter'] is defined) and (idp_config['url_attribute_filter'] != '')) %}
+        <ref bean="AttributeFilterByUrl"/>
+{% else %}
+        <value>%{idp.home}/conf/attribute-filter-custom.xml</value>
 {% endif %}
     </util:list>
 
