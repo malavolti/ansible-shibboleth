@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-import MySQLdb
+import pymysql
 
-db = MySQLdb.connect("localhost","root","{{ mysql['root_password'] }}" )
+db = pymysql.connect("localhost","root","{{ mysql['root_password'] }}" )
 
 cursor = db.cursor()
 
@@ -20,8 +20,8 @@ cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schem
 sps = cursor.fetchone()
 
 if (shibpid and storageRecords and logins and sps):
-   print "0 check_mysql - SUCCESS - IdP has all needed databases"
+   print ("0 check_mysql - SUCCESS - IdP has all needed databases")
 else:
-   print "1 check_mysql - CRITICAL - IdP doesn't have all needed databases"
+   print ("1 check_mysql - CRITICAL - IdP doesn't have all needed databases")
 
 db.close()
