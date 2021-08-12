@@ -38,13 +38,12 @@
    state: latest
    install_recommends: no
   when:
-   - ansible_distribution_release == 'jessie' or ansible_distribution_release == "stretch"
+   - ansible_distribution_release == 'jessie'
 
 - name: "Install Mysql server and needed libraries"
   apt:
-   name: ['python-mysqldb', 'default-mysql-server', 'libcommons-dbcp-java', 'libcommons-pool-java', 'libmariadb-java']
+   name: ['python3-mysqldb', 'default-mysql-server', 'libcommons-dbcp-java', 'libcommons-pool-java', 'libmariadb-java']
    state: latest
    install_recommends: no
   when:
    - ansible_distribution_release != 'jessie'
-   - ansible_distribution_release != 'stretch'

@@ -5,18 +5,11 @@
    update_cache: yes
    cache_valid_time: 3600
 
-- name: "Install 'debconf-utils' and 'python-ldap' packages"
+- name: "Install 'debconf-utils' & 'python3-ldap' packages"
   apt:
-   name: ['debconf-utils', 'python-ldap']
+   name: ['debconf-utils','python3-ldap']
    state: latest
    install_recommends: no
-
-- name: "Install 'python3-ldap' if Debian OS version > 9"
-  apt:
-   name: 'python3-ldap'
-   state: latest
-   install_recommends: no
-  when: ansible_distribution_major_version|int > 9
 
 - name: "Check if debconf-get-selections has parameters for unattended OpenLDAP installation and store the result on 'debconf' ansible variable"
   shell: (debconf-get-selections | grep -q -s slapd); echo $?
@@ -39,7 +32,7 @@
       value: "{{ ldap['root_pw']|default('') }}"
     - key: slapd/move_old_database
       type: boolean
-      value: true
+      value: "true"
     - key: slapd/domain
       type: string
       value: "{{ ldap['domain']|default('') }}"
@@ -48,13 +41,13 @@
       value: "{{ ldap['org']|default('') }}"
     - key: slapd/no_configuration
       type: boolean
-      value: false
+      value: "false"
     - key: slapd/purge_database
       type: boolean
-      value: false
+      value: "false"
     - key: slapd/allow_ldap_v2
       type: boolean
-      value: false
+      value: "false"
     - key: slapd/backend
       type: select
       value: MDB

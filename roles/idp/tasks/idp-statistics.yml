@@ -7,7 +7,7 @@
 
 - name: "Install packages needed by /statistics application"
   apt:
-   name: ['python-mysqldb','php','php-xml','php-mysqli']
+   name: ['python3-mysqldb','php','php-xml','php-mysqli']
    state: latest
    install_recommends: no
   when:

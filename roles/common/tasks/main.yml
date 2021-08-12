@@ -10,6 +10,13 @@
    mode: "0644"
   tags: common
 
+- name: "Install needed Python3 module for apt"
+  apt: 
+   name: "python3-apt" 
+   install_recommends: no
+   state: present
+  tags: common
+
 - name: "Run 'apt-get update' if the last one is more than 3600 seconds ago"
   apt:
    update_cache: yes
