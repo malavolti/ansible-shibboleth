@@ -24,12 +24,12 @@ idp_dl_url: "https://shibboleth.net/downloads/identity-provider/archive/{{ shib_
 #shib_idp_checksum: "46fe154859f9f1557acd1ae26ee9ac82ded938af52a7dec0b18adbf5bb4510e9"
 
 # Shibboleth 4.1.2
-shib_idp_version: "4.1.2"
-shib_idp_checksum: "2d35dbccc6c6ae6f7eec4adc98eaa406c33df3ad49879839a3839dbf427afff8"
+#shib_idp_version: "4.1.2"
+#shib_idp_checksum: "2d35dbccc6c6ae6f7eec4adc98eaa406c33df3ad49879839a3839dbf427afff8"
 
 # Shibboleth 4.1.4
-#shib_idp_version: "4.1.4"
-#shib_idp_checksum: "cac7f6410a12e0b9711e17cd9dba027b4151a268d048729b10ae730ed4f33009"
+shib_idp_version: "4.1.4"
+shib_idp_checksum: "65429f547a7854b30713d86ba5901ca718eae91efb3e618ee11108be59bf8a29"
 
 # Available:
 #
