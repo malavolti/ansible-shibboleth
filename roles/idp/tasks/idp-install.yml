@@ -137,5 +137,12 @@
     - "metadata"
     - "credentials"
     - "conf"
-    - "system"
     - "war"
+
+- name: "Set right ownership to Shibboleth IdP 'system' dir"
+  file:
+   path: "/opt/shibboleth-idp/system"
+   owner: "jetty"
+   recurse: "yes"
+   state: directory
+  when: "shib_idp_version is search('^3.')"
