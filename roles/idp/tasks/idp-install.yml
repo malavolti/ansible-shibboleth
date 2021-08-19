@@ -29,20 +29,6 @@
   when:
    - shib_tarball.stat.exists == False
 
-- name: "Put Shibboleth Identity Provider v3.x installer properties' files in the right position"
-  template:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
-   owner: "root"
-   group: "root"
-   mode: "{{ item.mode }}"
-  with_items:
-   - { src: "shib-idp-install.properties.j2", dest: "/tmp/shib-idp-install.properties", mode: "0644" }
-   - { src: "installer.properties.j2", dest: "/tmp/installer.properties", mode: "0644" } 
-  when: 
-   - shib_tarball.stat.exists == False
-   - "shib_idp_version is search('^3.')"
-
 - name: "Put Shibboleth Identity Provider v4.x installer properties' files in the right position"
   template:
    src: "{{ item.src }}"
@@ -120,11 +106,3 @@
     - "credentials"
     - "conf"
     - "war"
-
-- name: "Set right ownership to Shibboleth IdP 'system' dir"
-  file:
-   path: "/opt/shibboleth-idp/system"
-   owner: "jetty"
-   recurse: "yes"
-   state: directory
-  when: "shib_idp_version is search('^3.')"
