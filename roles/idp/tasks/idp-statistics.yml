@@ -7,19 +7,9 @@
 
 - name: "Install packages needed by /statistics application"
   apt:
-   name: ['python3-mysqldb','php','php-xml','php-mysqli']
+   name: ['python3-mysqldb','php','php-xml','php-mysql']
    state: latest
    install_recommends: no
-  when:
-   - ansible_distribution_release != "jessie"
-
-- name: "Debian 8 - Install packages needed by /statistics application"
-  apt:
-   name: ['php5-mysql', 'php5']
-   state: latest
-   install_recommends: no
-  when:
-   - ansible_distribution_release == "jessie"
 
 - name: "Check if 'statistics' DB is already created on {{ idp_stats['db_host'] }} and store the result into 'statistics_db' ansible variable"
   command: mysql --host={{ idp_stats['db_host'] }} --user=statistics --password={{ idp_stats['db_pw'] }} -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='statistics'"

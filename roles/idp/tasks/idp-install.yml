@@ -56,7 +56,6 @@
    - shib_tarball.stat.exists == False
    - "shib_idp_version is search('^4.')"
 
-# Create 'shibboleth' DB only for Shibboleth IdP v3.x
 - name: "Put the Shibboleth Identity Provider persistent-id database structure file in the right position"
   template:
    src: "shib-idp-persistentId-db.sql.j2"
@@ -69,7 +68,7 @@
    - idp_config['idp_persistentId_type'] is defined
    - idp_config['idp_persistentId_type'] == "stored"
 
-- name: "Create link for commons-dbcp, commons-pool and mysql JAR files used by Shibboleth IdP"
+- name: "Create link for commons-dbcp & commons-pool JAR files needed by Shibboleth IdP for 'stored' persistent-id"
   file:
    src: "{{ item.src }}" 
    dest: "{{ item.dest }}"
@@ -84,22 +83,7 @@
    - idp_config['idp_persistentId_type'] is defined
    - idp_config['idp_persistentId_type'] == "stored"
 
-- name: "Create link for MySQL Connector JAR files used by Shibboleth IdP"
-  file:
-   src: "{{ item.src }}" 
-   dest: "{{ item.dest }}"
-   owner: "jetty"
-   group: "jetty"
-   state: link
-  with_items:
-   - { src: '/usr/share/java/mysql.jar' ,dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/mysql-connector-java.jar" }
-  when: 
-   - ansible_distribution_release == 'jessie' or ansible_distribution_release == 'stretch'
-   - idp_config is defined
-   - idp_config['idp_persistentId_type'] is defined
-   - idp_config['idp_persistentId_type'] == "stored"
-
-- name: "Create link for MariaDB Connector JAR files used by Shibboleth IdP"
+- name: "Create link for MariaDB Connector JAR files needed by Shibboleth IdP for 'stored' persistent-id"
   file:
    src: "{{ item.src }}" 
    dest: "{{ item.dest }}"
@@ -109,8 +93,6 @@
   with_items:
    - { src: '/usr/share/java/mariadb-java-client.jar', dest: "/usr/local/src/shibboleth-identity-provider-{{ shib_idp_version }}/webapp/WEB-INF/lib/mariadb-java-client.jar" }
   when: 
-   - ansible_distribution_release != 'jessie'
-   - ansible_distribution_release != 'stretch'
    - idp_config is defined
    - idp_config['idp_persistentId_type'] is defined
    - idp_config['idp_persistentId_type'] == "stored"
