@@ -5,9 +5,15 @@
    update_cache: yes
    cache_valid_time: 3600
 
-- name: "Install 'debconf-utils' & 'python3-ldap' packages"
+- name: "Install 'debconf-utils' packages"
   apt:
-   name: ['debconf-utils','python3-ldap']
+   name: 'debconf-utils'
+   state: latest
+   install_recommends: no
+
+- name: "Install 'python3-ldap'"
+  apt:
+   name: 'python3-ldap'
    state: latest
    install_recommends: no
 
