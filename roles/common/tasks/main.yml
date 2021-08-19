@@ -122,12 +122,11 @@
    - "Update Timezone"
   tags: common
 
-- name: "Set /etc/localtime in Debian Stretch"
+- name: "Set /etc/localtime"
   file:
    src: "/usr/share/zoneinfo/{{ my_timezone }}"
    dest: "/etc/localtime"
    state: link
-  when: ansible_distribution_release != "jessie"
   tags: common
 
 - name: "Be sure to configure SSL if needed"

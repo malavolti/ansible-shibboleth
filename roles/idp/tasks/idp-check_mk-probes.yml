@@ -7,7 +7,6 @@
 
 - name: "Install needed 'ldap' and 'pymysql' packages for Python 3"
   apt:
-  apt:
    name: ['python3-ldap','python3-pymysql']
    state: latest
    install_recommends: no
