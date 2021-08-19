@@ -37,10 +37,6 @@ shib_idp_checksum: "65429f547a7854b30713d86ba5901ca718eae91efb3e618ee11108be59bf
 #   jdk_type: "openjdk"
 #   jdk_version: "8"
 #
-# Oracle JDK: 
-#   jdk_type: "oraclejdk"
-#   jdk_version: "8"
-#
 # Amazon Corretto JDK: 
 #   jdk_type: "corretto"
 #   jdk_version: "11"
