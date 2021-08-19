@@ -65,7 +65,6 @@
   command: "ansible-vault encrypt --vault-password-file {{ vault_file }} {{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
   delegate_to: 127.0.0.1
   when: "'ANSIBLE_VAULT' in host_yaml.stdout"
-  tags: restore
 
 - name: "RESTORE - Be sure to set the right owner and group of YML file"
   file:
@@ -74,4 +73,3 @@
    group: "{{ lookup('env','USER') }}"
    state: file
   delegate_to: 127.0.0.1
-  tags: restore
