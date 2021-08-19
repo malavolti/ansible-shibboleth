@@ -79,7 +79,6 @@ idp_metadata:
   org_displayName: "ITA Organization DisplayName"
   org_url: "https://www.organization.org/it"
 
-
 idp_contacts:
  technical:
   givenName: "Example Technical"
@@ -91,3 +90,7 @@ idp_contacts:
   mail: "support.user@example.org"
   address: "Example Address 32, Milan, Italy"
   telephone: "+393249582321"
+
+idp_db_restore: "false"
+idp_sealer_restore: "false"
+idp_stats_restore: "false"
