@@ -61,7 +61,6 @@
    - { src: "statistics/insertSP.php.j2", dest: "/opt/loganalysis/insertSP.php", mode: "0644" }
    - { src: "statistics/IDProvider.conf.php.j2", dest: "/opt/loganalysis/IDProvider.conf.php", mode: "0644" }
    - { src: "statistics/db.php.j2", dest: "/var/www/html/statistics/db.php", mode: "0644" }
-   - { src: "statistics/idp-stats.conf.j2", dest: "/etc/apache2/conf-enabled/idp-stats.conf", mode: "0644" }
   notify:
    - "Restart Apache"
 
