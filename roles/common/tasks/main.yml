@@ -154,3 +154,13 @@
    state: directory
    mode: "u+rwx,g+rwx,o+rwt"
   tags: common
+
+- name: "Ensure the en_US.UTF-8 locale exists"
+  locale_gen:
+   name: 'en_US.UTF-8'
+   state: present
+  tags: common
+
+- name: "Ensure that en_US.UTF-8 is the default language"
+  command: "update-locale LANG=en_US.utf8"
+  tags: common
