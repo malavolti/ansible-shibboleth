@@ -3,37 +3,20 @@
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Strumenti per la gestione utenti</title>
-  <link rel="shortcut icon" href="../idm/images/favicon.ico" type="image/vnd.microsoft.icon">
-  <link type="text/css" rel="stylesheet" href="../idm/css/default/custom.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-  <script type="text/javascript" src="../idm/js/jquery-1.9.1.min.js"></script>
-  <script type="text/javascript" src="../idm/js/jquery-ui-1.9.1.min.js"></script>
-  <script type="text/javascript" src="../idm/js/livevalidation_standalone.compressed.js"></script>
+  <link rel="shortcut icon" href="../it/favicon.png">
+  <link rel="stylesheet" href="../idm/css/default/custom.css">
  </head>
  <body>
   <table class="page" border="0" width="100%">
    <tbody>
-    <tr class="pagehead">
-     <td colspan="3">
-      <div id="ajHEAD">
+    <tr>
+     <td>
+      <div>
        <table width="100%" border="0">
         <tbody>
          <tr>
-          <td align="left"><a href="{{ pla['orgUrl'] }}" target="_self"><img src="../idm/images/default/logo-small.png" alt="Logo" class="logo"></a></td>
-          <td class="imagetop">&nbsp;</td>
-         </tr>
-        </tbody>
-       </table>
-      </div>
-     </td>
-    </tr>
-    <tr class="control">
-     <td colspan="3">
-      <div id="ajCONTROL">
-       <table class="control" width="100%" border="0">
-        <tbody>
-         <tr>
-          <td><a href="/" title="Inizio">Inizio</a></td>
+          <td align="left" width="10%"><a href="{{ idp_metadata['it']['org_url'] }}" target="_self"><img src="../it/logo.png" alt="Logo" class="logo"></a></td>
+          <td align="left"><h1>Gestione Utenti per l'Identity Provider di {{ idp_metadata['it']['org_name'] }}</h1></td>
          </tr>
         </tbody>
        </table>
@@ -41,31 +24,15 @@
      </td>
     </tr>
     <tr>
-     <td class="tree">
-      <div id="ajSID_1" style="display: block">
-       <table class="tree" border="0">
-        <tbody>
-         <tr class="server">
-          <td class="icon">
-           <img src="../idm/images/default/server.png" alt="Server">
-          </td>
-          <td class="name">{{ pla['ldap']['org'] }} LDAP Server</td>
-         </tr>
-        </tbody>
-       </table>
-      </div>
-     </td>  
-     <td class="spacer"></td>
      <td class="body" width="80%">
-      <div id="ajBODY">
+      <div>
        <table class="body">
         <tbody>
          <tr>
           <td>
            <center>
-            <h3 class="title">Strumenti per la gestione utenti</h3>
-            <h3 class="subtitle">Server: <b>{{ pla['ldap']['org'] }} LDAP Server</b>&nbsp;&nbsp;&nbsp;Contenitore: <b>ou=people,{{ pla['ldap']['basedn'] }}</b></h3>
-            <center><h4>Identity Provider: Gestione Utenti</h4></center>
+            <h3 class="title">Strumenti per la gestione degli utenti</h3>
+            <center>&nbsp;</center>
             <table class="entry" cellspacing="0" border="0" style="margin-left: auto; margin-right: auto;">
              <tbody>
               <tr class="updated">
@@ -77,7 +44,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" border="0">
                  <tbody>
                   <tr>
-                   <td class="icon" style="width: 25px;"><img src="../idm/images/default/ldap-ou.png" alt="Icon" style="float: right;">&nbsp;</td>
+                   <td class="icon" style="width: 25px;"><img src="images/ldap-ou.png" alt="Icon" style="float: right;">&nbsp;</td>
                    <td valign="top">Accedi all'interfaccia di <b>Gestione Utenti</b><br/> per la creazione, cancellazione, modifica degli utenti sul server LDAP.</td>
                    <td valign="top" style="text-align: right;"></td>
                   </tr>
@@ -102,7 +69,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" border="0">
                  <tbody>
                   <tr>
-                   <td class="icon" style="width: 25px;"><img src="../idm/images/default/ldap-ou.png" alt="Icon" style="float: right;">&nbsp;</td>
+                   <td class="icon" style="width: 25px;"><img src="images/lock-icon.png" alt="Icon" style="float: right;">&nbsp;</td>
                    <td valign="top">Accedi all'interfaccia di <b>Blocco/Sblocco</b><br/> per il blocco/sblocco degli utenti e per l'impostazione<br/> della loro data di fine rapporto (per la scadenza automatica dell'account).<br/></td>
                    <td valign="top" style="text-align: right;"></td>
                   </tr>
@@ -127,7 +94,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" border="0">
                  <tbody>
                   <tr>
-                   <td class="icon" style="width: 25px;"><img src="../idm/images/default/ldap-ou.png" alt="Icon" style="float: right;">&nbsp;</td>
+                   <td class="icon" style="width: 25px;"><img src="images/statistics.png" alt="Icon" style="float: right;">&nbsp;</td>
                    <td valign="top">Accedi all'interfaccia <b>Statistiche</b><br/> per visionare quanto i tuoi utenti usano le risorse federate<br/> accedibili con questo IdP.<br/></td>
                    <td valign="top" style="text-align: right;"></td>
                   </tr>
@@ -152,7 +119,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" border="0">
                  <tbody>
                   <tr>
-                   <td class="icon" style="width: 25px;"><img src="../idm/images/default/ldap-ou.png" alt="Icon" style="float: right;">&nbsp;</td>
+                   <td class="icon" style="width: 25px;"><img src="images/user-update.png" alt="Icon" style="float: right;">&nbsp;</td>
                    <td valign="top">Accedi all'interfaccia <b>Aggiornamento Utenti</b><br/> per visionare quali nuovi utenti sono stati aggiunti a questo IdP.<br/></td>
                    <td valign="top" style="text-align: right;"></td>
                   </tr>
@@ -178,7 +145,7 @@
       </div>
      </td>
     </tr>
-    <tr class="foot"><td><small>&nbsp;</small></td><td colspan="4"><div>&nbsp;</div></td></tr>
+    <tr class="foot"><td><small>&nbsp;</small></td></tr>
    </tbody>
   </table>
  </body>

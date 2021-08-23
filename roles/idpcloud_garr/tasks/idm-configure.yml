@@ -72,13 +72,11 @@
 
 - name: "Be sure to copy 'checkValue.php' on phpldapadmin/htdocs"
   template:
-   src: "{{ item.src }}"
-   dest: "{{ item.dest }}"
+   src: "phpldapadmin/htdocs/checkValue.php.j2"
+   dest: "/opt/phpldapadmin/htdocs/checkValue.php"
    owner: "root"
    group: "root"
-   mode: "{{ item.mode }}"
-  with_items:
-   - { src: "phpldapadmin/htdocs/checkValue.php.j2", dest: "/opt/phpldapadmin/htdocs/checkValue.php", mode: "0644" }
+   mode: "0644"
 
 - name: "Be sure to add needed files for locking/unlocking users"
   template:
@@ -99,11 +97,6 @@
    owner: "root"
    group: "www-data"
   changed_when: False
-
-- name: "Check if the template used to create user is provided"
-  stat:
-   path: "/opt/phpldapadmin/lib/TemplateRenderOrig.php"
-  register: TemplateRenderOrig
 
 # Load /opt/phpldapadmin/templates/creation/custom_idpAccount.xml
 - name: "Check if 'creation/custom_idpAccount_{{ idpcloud_garr['idm'] }}.xml' is provided under {{ files_dir }}/<FQDN>/idpcloud_garr/phpldapadmin/templates"
@@ -175,13 +168,42 @@
    state: directory
    mode: 0755
 
+- name: "Be sure to create 'idm-tools/css' directory"
+  file:
+   path: "/opt/phpldapadmin/htdocs/idm-tools/css"
+   state: directory
+   mode: 0755
+
+- name: "Be sure to create 'idm-tools/images' directory"
+  file:
+   path: "/opt/phpldapadmin/htdocs/idm-tools/images"
+   state: directory
+   mode: 0755
+
+- name: "Copy files and directories needed by 'idm-tools'"
+  copy:
+   src: "{{ item.src }}"
+   dest: "{{ item.dest }}"
+   owner: "root"
+   group: "root"
+   mode: 0644
+  loop:
+   - { src: "files/idm-tools/images/ldap-ou.png", dest: "/opt/phpldapadmin/htdocs/idm-tools/images/ldap-ou.png" }
+   - { src: "files/idm-tools/images/lock-icon.png", dest: "/opt/phpldapadmin/htdocs/idm-tools/images/lock-icon.png" }
+   - { src: "files/idm-tools/images/statistics.png", dest: "/opt/phpldapadmin/htdocs/idm-tools/images/statistics.png" }
+   - { src: "files/idm-tools/images/user-update.png", dest: "/opt/phpldapadmin/htdocs/idm-tools/images/user-update.png" }
+   - { src: "files/idm-tools/index.php", dest: "/opt/phpldapadmin/htdocs/idm-tools/index.php" }
+
 - name: "Be sure to load idm-tools index page"
   template:
-   src: "phpldapadmin/htdocs/idm-tools/index.php.j2"
-   dest: "/opt/phpldapadmin/htdocs/idm-tools/index.php"
+   src: "{{ item.src }}"
+   dest: "{{ item.dest }}"
    owner: "root"
    group: "root"
    mode: "0644"
+  loop:
+   - { src: "idm-tools/index_it.php.j2", dest: "/opt/phpldapadmin/htdocs/idm-tools/index_it.php" }
+   - { src: "idm-tools/index_en.php.j2", dest: "/opt/phpldapadmin/htdocs/idm-tools/index_en.php" }
   notify:
    - "Restart Apache"
 
@@ -231,18 +253,22 @@
    - { line: "# Data: " }
    - { line: "" }
    - { line: "Nuovi utenti per {{ ldap['org'] }}:" }
+  when: ansible_fqdn not in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it','idp-portici.izs.garr.it','idp-sicilia.izs.garr.it','idp-acs.beniculturali.garr.it','idp-iccu.beniculturali.garr.it','idp-ssbar.beniculturali.garr.it']
 
 - name: "Check if 'updates.txt' file is missing"
   stat:
-   path: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
+   path: "/var/www/html/idm-tools/updates.txt"
   register: updates_txt
+  when: ansible_fqdn not in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it','idp-portici.izs.garr.it','idp-sicilia.izs.garr.it','idp-acs.beniculturali.garr.it','idp-iccu.beniculturali.garr.it','idp-ssbar.beniculturali.garr.it']
 
-- name: "Be sure to create an Hard Link of 'updates.txt' under phpldapadmin dir if missing"
+- name: "Be sure to create an Hard Link of 'updates.txt' under /var/www/html/idm-tools dir if missing"
   file:
    src: "/var/local/backups/updates.txt"
    dest: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
    state: hard
-  when: updates_txt.stat.exists == False
+  when: 
+   - ansible_fqdn not in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it','idp-portici.izs.garr.it','idp-sicilia.izs.garr.it','idp-acs.beniculturali.garr.it','idp-iccu.beniculturali.garr.it','idp-ssbar.beniculturali.garr.it']
+   - updates_txt.stat.exists == False
 
 - name: "Be sure to add the Test User - INDIRE IdP"
   ldap_attr:
@@ -251,3 +277,12 @@
    values: "{{ idp_config['scope'] }}"
    state: present
   when: ansible_fqdn in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it']
+
+- name: "Ensure the it_IT.UTF-8 locale exists"
+  locale_gen:
+   name: 'it_IT.UTF-8'
+   state: present
+
+- name: "Ensure that en_US.UTF-8 is the default language"
+  command: "update-locale LANG=en_US.utf8"
+  changed_when: False
