@@ -257,11 +257,11 @@
 
 - name: "Check if 'updates.txt' file is missing"
   stat:
-   path: "/var/www/html/idm-tools/updates.txt"
+   path: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
   register: updates_txt
   when: ansible_fqdn not in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it','idp-portici.izs.garr.it','idp-sicilia.izs.garr.it','idp-acs.beniculturali.garr.it','idp-iccu.beniculturali.garr.it','idp-ssbar.beniculturali.garr.it']
 
-- name: "Be sure to create an Hard Link of 'updates.txt' under /var/www/html/idm-tools dir if missing"
+- name: "Be sure to create an Hard Link of 'updates.txt' under /opt/phpldapadmin/htdocs/idm-tools dir if missing"
   file:
    src: "/var/local/backups/updates.txt"
    dest: "/opt/phpldapadmin/htdocs/idm-tools/updates.txt"
