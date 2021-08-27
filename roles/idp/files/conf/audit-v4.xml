@@ -25,6 +25,7 @@
     <util:list id="shibboleth.AuditSuppressedProfiles">
         <value>http://shibboleth.net/ns/profiles/status</value>
         <value>http://shibboleth.net/ns/profiles/mdquery</value>
+        <value>http://shibboleth.net/ns/profiles/resolvertest</value>
     </util:list>
 
     <util:map id="shibboleth.AuditFieldReplacementMap">
