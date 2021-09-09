@@ -1,6 +1,14 @@
 ---
 # tasks file for idpcloud_garr
 
+- name: "Load IdP-in-the-Cloud 'audit.xml'"
+  import_tasks: "idp-audit-configure.yml"
+  when:
+   - audit_xml.stat.exists == False
+   - "shib_idp_version is search('^4.')"
+  notify:
+   - "Restart Jetty"
+
 - name: "Configure IdM of IdP-in-the-Cloud"
   import_tasks: "idm-configure.yml"
   when: 

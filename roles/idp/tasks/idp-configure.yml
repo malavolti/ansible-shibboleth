@@ -560,19 +560,6 @@
   notify:
    - "Restart Jetty"
 
-- name: "Load default 'audit.xml' provided for Shibboleth IdP v4.x"
-  copy:
-   src: "files/conf/audit-v4.xml"
-   dest: "/opt/shibboleth-idp/conf/audit.xml"
-   owner: "jetty"
-   group: "root"
-   mode: "0600"
-  when:
-   - audit_xml.stat.exists == False
-   - "shib_idp_version is search('^4.')"
-  notify:
-   - "Restart Jetty"
-
 # Load /opt/shibboleth-idp/conf/mvc-beans.xml
 - name: "Check if a custom 'mvc-beans.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
   stat:
