@@ -1,10 +1,13 @@
 # ANSIBLE CODE TO INSTALL SHIBBOLETH PRODUCTS
 
+(UNDER REFACTORING)
+
 ## Requirements
 
-* [Ansible](https://www.ansible.com/) - Tested with Ansible v2.9.1
+* [Ansible](https://www.ansible.com/) - Tested with Ansible v2.9.10
+* Python 3 (Tested with Python 3.7.3)
 * [Shibboleth IdP source](https://shibboleth.net/downloads/identity-provider/latest/)
-* A Debian server/virtual machine where install the Shibboleth IdP v3.x/v4.x (8 'jessie' or 9 'stretch')
+* A Debian server/virtual machine where install the Shibboleth IdP v3.x/v4.x (11 => 'bullseye')
 
 ## Simple flow to install and configure a Shibboleth IdP
 
@@ -28,7 +31,7 @@
 
 5. Download the Shibboleth Identity Provider source code:
     * `cd /usr/local/src `
-    * `wget https://shibboleth.net/downloads/identity-provider/latest/shibboleth-identity-provider-3.3.2.tar.gz`
+    * `wget https://shibboleth.net/downloads/identity-provider/archive/3.3.2/shibboleth-identity-provider-3.3.2.tar.gz`
     * `tar xzf /usr/local/src/shibboleth-identity-provider-3.3.2.tar.gz`
     * `rm -f /usr/local/src/shibboleth-identity-provider-3.3.2.tar.gz`
 
