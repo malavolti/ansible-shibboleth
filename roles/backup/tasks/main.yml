@@ -1,0 +1,20 @@
+---
+# Task for backup.yml
+
+- name: "Look for ldap-backup script"
+  stat:
+    path: "/ect/cron.hourly/ldap-backup"
+  register: ldapbackup
+  
+- name: "Look for mysql-backup script"
+  stat:
+    path: "/ect/cron.hourly/mysql-backup"
+  register: mysqlbackup
+  
+- name: "Force a backup of all the IdPs slapd"
+  shell: "/etc/cron.hourly/ldap-backup"
+  when: ldapbackup.stat.exists is defined
+     
+- name: "Force a backup of all the IdPs mysql"
+  shell: "/etc/cron.hourly/mysql-backup"
+  when: mysqlbackup.stat.exists is defined

@@ -6,3 +6,4 @@
 - import_playbook: shib-idp-idm-servers-garr.yml
 - import_playbook: enable_maintenance.yml
 - import_playbook: disable_maintenance.yml
+- import_playbook: backup.yml
