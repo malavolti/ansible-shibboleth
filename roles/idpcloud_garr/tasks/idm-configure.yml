@@ -180,6 +180,14 @@
    state: directory
    mode: 0755
 
+- name: "Copy 'persistent-id-before-2018-09.csv' into 'idm-tools' dir"
+  copy:
+   src: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/idm-tools/persistent-id-before-2018-09.csv"
+   dest: "/opt/phpldapadmin/htdocs/idm-tools/persistent-id-before-2018-09.csv"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+
 - name: "Copy files and directories needed by 'idm-tools'"
   copy:
    src: "{{ item.src }}"
@@ -205,7 +213,7 @@
    - { src: "idm-tools/index_it.php.j2", dest: "/opt/phpldapadmin/htdocs/idm-tools/index_it.php" }
    - { src: "idm-tools/index_en.php.j2", dest: "/opt/phpldapadmin/htdocs/idm-tools/index_en.php" }
   notify:
-   - "Restart Apache"
+   - "Reload Apache"
 
 - name: "Be sure to load custom CSS for IdP-in-the-Cloud italian templates"
   copy:
