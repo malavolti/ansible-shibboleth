@@ -305,7 +305,7 @@
    group: "root"
    mode: "0600"
   notify:
-   - "Restart Jetty"
+   - "Reload Metadata Resolver"
 
 # Load /opt/shibboleth-idp/conf/attribute-resolver.xml
 - name: "Check if a custom 'attribute-resolver.xml' is provided under {{ files_dir }}/<FQDN>/idp/conf"
