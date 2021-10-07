@@ -135,7 +135,8 @@
                 </table>
                </td>
               </tr>
-<tr class="updated">
+{% if shib_pid_before_2018_09.stat.exists %}
+              <tr class="updated">
                <td class="title">Utenti con Persistent-ID cambiato da Settembre 2018</td>
                <td class="note"></td>
               </tr>
@@ -167,6 +168,7 @@
                 </table>
                </td>
               </tr>
+{% endif %}
              </tbody>
             </table>
            </center>

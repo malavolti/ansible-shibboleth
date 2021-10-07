@@ -180,6 +180,13 @@
    state: directory
    mode: 0755
 
+- name: "Look for 'persistent-id-before-2018-09.csv' file"
+  stat:
+   path: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/idm-tools/persistent-id-before-2018-09.csv"
+  register: shib_pid_before_2018_09
+  delegate_to: localhost
+  changed_when: false
+
 - name: "Copy 'persistent-id-before-2018-09.csv' into 'idm-tools' dir"
   copy:
    src: "{{ files_dir }}/{{ fqdn }}/idpcloud_garr/idm-tools/persistent-id-before-2018-09.csv"
@@ -187,6 +194,7 @@
    owner: "root"
    group: "root"
    mode: "0644"
+  when: shib_pid_before_2018_09.stat.exists == True
 
 - name: "Copy files and directories needed by 'idm-tools'"
   copy:
@@ -290,7 +298,3 @@
   locale_gen:
    name: 'it_IT.UTF-8'
    state: present
-
-- name: "Ensure that en_US.UTF-8 is the default language"
-  command: "update-locale LANG=en_US.utf8"
-  changed_when: False
