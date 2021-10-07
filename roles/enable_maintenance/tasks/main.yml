@@ -44,12 +44,12 @@
     </IfModule>
   when: not maintenance_conf.stat.exists
 
-- name: "Check Apache2 maintenance index file existance"
+- name: "Check '/var/www/html/maintenance.html' file existance"
   stat: 
    path: "/var/www/html/maintenance.html"
   register: maintenance_html
 
-- name: "Copy the Apache2 maintenance into index file"
+- name: "Create /var/www/html/maintenance.html"
   blockinfile:
    path: "/var/www/html/maintenance.html"
    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
