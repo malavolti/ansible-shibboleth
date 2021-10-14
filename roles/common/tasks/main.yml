@@ -171,6 +171,16 @@
    state: present
   tags: common
 
-- name: "Ensure that en_US.UTF-8 is the default language"
-  command: "update-locale LANG=en_US.utf8"
+- name: "Check the existance of '/etc/default/locale'"
+  stat:
+    path: /etc/default/locale
+  register: default_locale
+  tags: common
+
+- name: "Remove '/etc/default/locale' file"
+  file:
+   path: "/etc/default/locale"
+   state: absent
+  when:
+   - default_locale.stat.exists
   tags: common
