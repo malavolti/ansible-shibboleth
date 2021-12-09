@@ -234,7 +234,9 @@ idp.ui.fallbackLanguages=en,fr,de
 # F-TICKS auditing - set salt to include hashed username
 idp.fticks.federation={{ idp_config['fticks']['federation'] }}
 idp.fticks.algorithm={{ idp_config['fticks']['alg'] }}
+{% if idp_config['fticks']['salt'] is defined and idp_config['fticks']['salt'] != '' -%}
 idp.fticks.salt={{ idp_config['fticks']['salt'] }}
+{% endif %}
 idp.fticks.loghost={{ idp_config['fticks']['loghost'] }}
 idp.fticks.logport={{ idp_config['fticks']['logport'] }}
 
