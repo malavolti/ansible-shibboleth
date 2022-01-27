@@ -142,8 +142,6 @@
    - { src: "views/intercept/attribute-release-v4.vm.j2", dest: "/opt/shibboleth-idp/views/intercept/attribute-release.vm" }
   when:
    - "shib_idp_version is search('^4.')"
-  notify:
-   - "Restart Apache"
 
 - name: "Put default custom.properties and cookie_policy.properties in the right position"
   template:
@@ -261,6 +259,8 @@
    - idp_login is defined
    - idp_login['create_info_and_pp_pages'] is defined
    - idp_login['create_info_and_pp_pages'] in ["True","true","Yes","yes"]
+  notify:
+   - "Restart Apache"
 
 - name: "Remove all the Privacy Policy Pages created if they are not needed"
   file:
