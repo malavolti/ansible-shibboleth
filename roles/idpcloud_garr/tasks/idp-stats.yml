@@ -13,17 +13,16 @@
    dest: /home/debian/loganalysis.py
 
 - name: "Run script for each month"
-  shell: "zcat /opt/shibboleth-idp/logs/idp-audit-{{ item }}* | python /home/debian/loganalysis.py -j - > idp-{{ ldap['domain'] }}-{{ item }}-sso-stats.json"
+  shell: "zcat /opt/shibboleth-idp/logs/idp-audit-{{ item }}* | python3 /home/debian/loganalysis.py -j - > idp-{{ ldap['domain'] }}-{{ item }}-sso-stats.json"
   args:
    executable: /bin/bash
    chdir: /home/debian/{{ inventory_hostname }}
    creates: "idp-{{ ldap['domain'] }}-{{ item }}-sso-stats.json"
   loop:
-   - 2020-09
-   - 2020-10
-   - 2020-11
-   - 2020-12
-   - 2021-01
+   - 2021-09
+   - 2021-10
+   - 2021-11
+   - 2021-12
 
 - name: "Store files into /tmp/idpstats dir on the vagrant VM"
   ansible.builtin.fetch:
@@ -31,11 +30,10 @@
    dest: "/tmp/idpstats/"
    flat: yes
   loop:
-   - 2020-09
-   - 2020-10
-   - 2020-11
-   - 2020-12
-   - 2021-01
+   - 2021-09
+   - 2021-10
+   - 2021-11
+   - 2021-12
 
 - name: "Cleanup"
   ansible.builtin.file:

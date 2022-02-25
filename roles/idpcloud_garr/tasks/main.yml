@@ -41,7 +41,9 @@
   tags: idpcloud_garr,restore
 
 #- name: "Collect Login Statistics"
-#  import_tasks: idp-stats-2020-2021.yml
+#  import_tasks: idp-stats.yml
+#  when:
+#   - fqdn != "idp.ego-gw.it"
 #  tags: idp_stats
 
 #- name: "Discovery Persistent-ID changed with Shib IdP v4.0.1"
