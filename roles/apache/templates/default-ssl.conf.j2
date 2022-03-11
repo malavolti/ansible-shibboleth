@@ -42,6 +42,18 @@
                 # Enable HTTP Strict Transport Security with a 2 year duration
                 Header always set Strict-Transport-Security "max-age=63072000;includeSubDomains;preload"
 
+                # Prevent Cross-Site scripting (XSS) Attacks
+                Header set X-XSS-Protection "1; mode=block"
+ 
+                # Prevent click-jacking attacks. The content will be not embedded into other sites.
+                Header always append X-Frame-Options SAMEORIGIN
+
+                # Prevent MIME type sniffing.
+                Header set X-Content-Type-Options nosniff
+
+                # Don't send the Referer header for requests to less secure destinations.
+                Header always set Referrer-Policy "no-referrer-when-downgrade"
+
                 #   A self-signed (snakeoil) certificate can be created by installing
                 #   the ssl-cert package. See
                 #   /usr/share/doc/apache2/README.Debian.gz for more info.
