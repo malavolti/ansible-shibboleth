@@ -38,6 +38,9 @@
     -->
 
 {% for md in idp_metadata_providers %}    
+{%- if (md['comment'] is defined) and (md['comment']|length > 0) %}
+    <!-- {{ md['comment'] }} -->
+{% endif %}
 {% if md['url'] is defined %}
     <MetadataProvider
       id="{{ md['id'] }}"
@@ -64,7 +67,7 @@
 {% endif %}
 {% if (md['maxValidInterval'] is defined) and (md['maxValidInterval']|length > 0) %}
          <!--
-             Require a validUntil XML attribute on the root element and make sure its value is no more than 5 days into the future. 
+             Require a validUntil XML attribute on the root element and make sure its value is no more than N days into the future. 
          -->
          <MetadataFilter xsi:type="RequiredValidUntil" maxValidityInterval="{{ md['maxValidInterval'] }}"/>
 
@@ -73,6 +76,7 @@
          <MetadataFilter xsi:type="EntityRoleWhiteList">
             <RetainedRole>md:SPSSODescriptor</RetainedRole>
          </MetadataFilter>
+{% if md['id'] in ['EDUGAIN2IDEM-FEDERATION'] %}
 
          <MetadataFilter xsi:type="Algorithm">
             <!-- CBC-only SPs. -->
@@ -101,16 +105,16 @@
                <Entity>https://clas.cineca.it/simplesaml/module.php/saml/sp/metadata.php/default-sp</Entity>
                <Entity>https://zeroshell.irccs-stellamaris.it:12081/shibboleth</Entity>
          </MetadataFilter>
-
-{%- if (md['comment'] is defined) and (md['comment']|length > 0) %}
-         <!-- {{ md['comment'] }} -->
-	       <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
 {% endif %}
-
     </MetadataProvider>
+{% else %}
+{%- if (md['comment'] is defined) and (md['comment']|length > 0) %}
+    <!-- {{ md['comment'] }} -->
 {% endif %}
-{% endfor %}
+    <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
+{% endif %}
 
+{% endfor %}
     <!--
     Example file metadata provider.  Use this if you want to load metadata
     from a local file.  You might use this if you have some local SPs
