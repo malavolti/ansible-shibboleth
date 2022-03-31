@@ -6,6 +6,13 @@
    dest: "~/.my.cnf"
    mode: 0600
 
+- name: "Enable /var/log/mysql/error.log"
+  lineinfile:
+   dest: "/etc/mysql/mariadb.conf.d/50-server.cnf"
+   regexp: "^#log_error "
+   line: "log_error = /var/log/mysql/error.log"
+   state: present
+
 - name: "Start MySQL service"
   systemd:
    name: mysql

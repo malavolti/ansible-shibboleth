@@ -18,7 +18,7 @@ ruleset(name="sendToLogserver") {
 # Apache2 Logs
 input(type="imfile" Facility="local0" File="/var/log/apache2/access.log" Tag="apache2access" Ruleset="sendToLogserver")
 input(type="imfile" Facility="local0" File="/var/log/apache2/error.log" Tag="apache2error" Ruleset="sendToLogserver")
-input(type="imfile" Facility="local0" File="/var/log/apache2/other_vhost_access.log" Tag="apache2other" Ruleset="sendToLogserver")
+input(type="imfile" Facility="local0" File="/var/log/apache2/other_vhosts_access.log" Tag="apache2other" Ruleset="sendToLogserver")
 
 # Jetty Logs
 input(type="imfile" Facility="local0" File="/var/log/jetty/*.jetty.log" Tag="jettyLog" Ruleset="sendToLogserver")
