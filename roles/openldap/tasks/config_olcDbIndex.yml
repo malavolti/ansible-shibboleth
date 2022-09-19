@@ -1,17 +1,34 @@
 ---
 
+# Ansible < 2.9
+#- name: "Be sure to configure Indexes for OpenLDAP"
+#  ldap_attr:
+#   dn: "olcDatabase={1}mdb,cn=config"
+#   name: "olcDbIndex"
+#   values: "{{ item.value }}"
+#   state: "{{ item.state }}" 
+#  with_items:
+#   - { value: 'objectClass eq', state: "present" }
+#   - { value: 'member eq', state: "exact" }
+#   - { value: 'cn pres,eq,sub', state: "exact" }
+#   - { value: 'ou pres,eq,sub', state: "present" }
+#   - { value: 'uid pres,eq', state: "exact" }
+#   - { value: 'entryUUID eq', state: "present" }
+#   - { value: 'sn pres,eq,sub', state: "present" }
+#   - { value: 'mail pres,eq,sub', state: "present"}
+
+# Ansible >= 2.10
 - name: "Be sure to configure Indexes for OpenLDAP"
-  ldap_attr:
+  community.general.ldap_attrs:
    dn: "olcDatabase={1}mdb,cn=config"
-   name: "olcDbIndex"
-   values: "{{ item.value }}"
-   state: "{{ item.state }}" 
-  with_items:
-   - { value: 'objectClass eq', state: "present" }
-   - { value: 'member eq', state: "exact" }
-   - { value: 'cn pres,eq,sub', state: "exact" }
-   - { value: 'ou pres,eq,sub', state: "present" }
-   - { value: 'uid pres,eq', state: "exact" }
-   - { value: 'entryUUID eq', state: "present" }
-   - { value: 'sn pres,eq,sub', state: "present" }
-   - { value: 'mail pres,eq,sub', state: "present"}
+   attributes:
+    olcDbIndex:
+     - "objectClass eq"
+     - "member eq"
+     - "cn pres,eq,sub"
+     - "ou pres,eq,sub"
+     - "uid pres,eq"
+     - "entryUUID eq"
+     - "sn pres,eq,sub"
+     - "mail pres,eq,sub"
+   state: present

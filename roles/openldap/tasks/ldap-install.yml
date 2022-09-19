@@ -70,14 +70,25 @@
   register: slapd_admin_password_hash
   changed_when: false
 
+# Ansible >= 2.10
 - name: "Change cn=admin password"
-  ldap_attr:
-    dn: olcDatabase={1}mdb,cn=config
-    name: "{{ item.key }}"
-    values: "{{ item.value }}"
-    state: exact
-  with_dict:
+  community.general.ldap_attrs:
+   dn: olcDatabase={1}mdb,cn=config
+   attributes:
     olcRootDN: "{{ ldap['root_dn'] }}"
     olcRootPW: "{{ slapd_admin_password_hash.stdout }}"
+   state: exact
   changed_when: false
+
+# Ansible < 2.9
+#- name: "Change cn=admin password"
+#  ldap_attr:
+#    dn: olcDatabase={1}mdb,cn=config
+#    name: "{{ item.key }}"
+#    values: "{{ item.value }}"
+#    state: exact
+#  with_dict:
+#    olcRootDN: "{{ ldap['root_dn'] }}"
+#    olcRootPW: "{{ slapd_admin_password_hash.stdout }}"
+#  changed_when: false
 

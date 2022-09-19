@@ -1,10 +1,22 @@
 ---
 
+# Ansible < 2.9
+#- name: "Be sure to configure olcSizeLimit to 'unlimited'"
+#  ldap_attr:
+#   dn: "{{ item.dn }}"
+#   name: olcSizeLimit
+#   values: "unlimited"
+#   state: exact
+#  with_items:
+#   - { dn: "cn=config" }
+#   - { dn: "olcDatabase={-1}frontend,cn=config" }
+
+# Ansible >= 2.10
 - name: "Be sure to configure olcSizeLimit to 'unlimited'"
-  ldap_attr:
+  community.general.ldap_attrs:
    dn: "{{ item.dn }}"
-   name: olcSizeLimit
-   values: "unlimited"
+   attributes:
+      olcSizeLimit: "unlimited"
    state: exact
   with_items:
    - { dn: "cn=config" }

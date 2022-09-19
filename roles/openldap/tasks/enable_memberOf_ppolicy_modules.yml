@@ -1,10 +1,20 @@
 ---
 
+# Ansible < 2.9
+#- name: "Be sure to load 'memberof' and 'ppolicy' OpenLDAP module"
+#  ldap_attr:
+#   dn: "cn=module{0},cn=config"
+#   name: "olcModuleLoad"
+#   values: "{{ item }}"
+#  with_items:
+#   - "{1}memberof"
+#   - "{2}ppolicy"
+
+# Ansible >= 2.10
 - name: "Be sure to load 'memberof' and 'ppolicy' OpenLDAP module"
-  ldap_attr:
+  community.general.ldap_attrs:
    dn: "cn=module{0},cn=config"
-   name: "olcModuleLoad"
-   values: "{{ item }}"
-  with_items:
-   - "{1}memberof"
-   - "{2}ppolicy"
+   attributes:
+    olcModuleLoad:
+     - "{1}memberof"
+     - "{2}ppolicy"

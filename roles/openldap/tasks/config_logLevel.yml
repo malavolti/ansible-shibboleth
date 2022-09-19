@@ -1,8 +1,17 @@
 ---
 
+# Ansible < 2.9
+#- name: "Be sure to configure olcLogLevel"
+#  ldap_attr:
+#   dn: "cn=config"
+#   name: olcLogLevel
+#   values: 256
+#   state: exact 
+
+# Ansible >= 2.10
 - name: "Be sure to configure olcLogLevel"
-  ldap_attr:
+  community.general.ldap_attrs:
    dn: "cn=config"
-   name: olcLogLevel
-   values: 256
+   attributes: 
+    olcLogLevel: 256
    state: exact 
