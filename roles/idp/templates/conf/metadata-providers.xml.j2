@@ -37,20 +37,34 @@
     that the IdP needs to interoperate with.
     -->
 
-{% for md in idp_metadata_providers %}    
+{% for md in idp_metadata_providers %}
 {%- if (md['comment'] is defined) and (md['comment']|length > 0) %}
     <!-- {{ md['comment'] }} -->
 {% endif %}
-{% if md['url'] is defined %}
     <MetadataProvider
+{% if (md['url'] is not defined) and (md['baseUrl'] is not defined) %}
+      id="{{ md['id'] }}"
+      xsi:type="FilesystemMetadataProvider"
+      metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
+{% else %}
+{% if md['url'] is defined %}
       id="{{ md['id'] }}"
       xsi:type="FileBackedHTTPMetadataProvider"
+      backingFile="%{idp.home}/metadata/{{ md['file'] }}"
+      metadataURL="{{ md['url'] }}"
+{% elif md['baseUrl'] is defined %}
+      id="{{ md['id'] }}"
+      xsi:type="DynamicHTTPMetadataProvider"
+      connectionRequestTimeout="{{ md['connectionRequestTimeout'] }}"
+      connectionTimeout="{{ md['connectionTimeout'] }}"
+      socketTimeout="{{ md['socketTimeout'] }}"
+      refreshDelayFactor="{{ md['refreshDelayFactor'] | default('0.75') }}"
+      maxCacheDuration="{{ md['maxCacheDuration'] }}"
+{% endif %}
 {% if http_proxy_host is defined %}
       proxyHost="{{ http_proxy_host }}"
       proxyPort="{{ http_proxy_port }}"
 {% endif %}
-      backingFile="%{idp.home}/metadata/{{ md['file'] }}"
-      metadataURL="{{ md['url'] }}"
       disregardTLSCertificate="{{ md['disregardTLSCertificate'] | default('false') }}">
 
 {% if (md['pubKey'] is defined) and (md['pubKey']|length > 0) %}
@@ -106,15 +120,14 @@
                <Entity>https://zeroshell.irccs-stellamaris.it:12081/shibboleth</Entity>
          </MetadataFilter>
 {% endif %}
+{% if md['baseUrl'] is defined %}
+        <MetadataQueryProtocol>{{ md['baseUrl'] }}</MetadataQueryProtocol>
+{% endif %}
     </MetadataProvider>
-{% else %}
-{%- if (md['comment'] is defined) and (md['comment']|length > 0) %}
-    <!-- {{ md['comment'] }} -->
-{% endif %}
-    <MetadataProvider id="{{ md['id'] }}"  xsi:type="FilesystemMetadataProvider" metadataFile="/opt/shibboleth-idp/metadata/{{ md['file'] }}"/>
-{% endif %}
 
+{% endif %}
 {% endfor %}
+
     <!--
     Example file metadata provider.  Use this if you want to load metadata
     from a local file.  You might use this if you have some local SPs
