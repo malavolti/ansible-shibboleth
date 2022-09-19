@@ -255,7 +255,7 @@
     insertbefore: "</VirtualHost>"
     block: |
       Include conf-available/idm-tools.conf
-  when: idm_tools_apache.stat.islnk is not defined
+  when: idm_tools_apache.stat.islnk is defined
   notify:
    - "Restart Apache"
 
@@ -286,11 +286,21 @@
    - ansible_fqdn not in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it','idp-portici.izs.garr.it','idp-sicilia.izs.garr.it','idp-acs.beniculturali.garr.it','idp-iccu.beniculturali.garr.it','idp-ssbar.beniculturali.garr.it']
    - updates_txt.stat.exists == False
 
+# Ansible < 2.9
+#- name: "Be sure to add the Test User - INDIRE IdP"
+#  ldap_attr:
+#   dn: "uid=testuser,ou=people,{{ ldap['basedn'] }}"
+#   name: "schacHomeOrganization"
+#   values: "{{ idp_config['scope'] }}"
+#   state: present
+#  when: ansible_fqdn in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it']
+
+# Ansible >= 2.10
 - name: "Be sure to add the Test User - INDIRE IdP"
-  ldap_attr:
+  community.general.ldap_attrs:
    dn: "uid=testuser,ou=people,{{ ldap['basedn'] }}"
-   name: "schacHomeOrganization"
-   values: "{{ idp_config['scope'] }}"
+   attributes:
+    schacHomeOrganization: "{{ idp_config['scope'] }}"
    state: present
   when: ansible_fqdn in ['eduid-pilot.aai.garr.it','eduid-indire.aai.garr.it']
 
