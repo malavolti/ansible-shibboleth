@@ -4,10 +4,10 @@
 
 ## Requirements
 
-* [Ansible](https://www.ansible.com/) - Tested with Ansible v2.9.10
-* Python 3 (Tested with Python 3.7.3)
+* [Ansible](https://www.ansible.com/) - Tested with Ansible v2.10.8
+* Python 3 (Tested with Python 3.9.2)
 * [Shibboleth IdP source](https://shibboleth.net/downloads/identity-provider/latest/)
-* A Debian server/virtual machine where install the Shibboleth IdP v3.x/v4.x (11 => 'bullseye')
+* A Debian server/virtual machine where install the Shibboleth IdP v4.x (11 => 'bullseye')
 
 ## Simple flow to install and configure a Shibboleth IdP
 
