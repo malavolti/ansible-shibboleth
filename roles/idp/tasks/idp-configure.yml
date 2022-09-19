@@ -696,12 +696,14 @@
 
 - name: "Upload Custom Metadata files"
   copy:
-   src: "{{ files_dir }}/{{ fqdn }}/idp/metadata/{{ item.file }}"
-   dest: "/opt/shibboleth-idp/metadata/{{ item.file }}"
+   src: "{{ files_dir }}/{{ fqdn }}/idp/metadata/{{ item['file'] }}"
+   dest: "/opt/shibboleth-idp/metadata/{{ item['file'] }}"
    owner: "jetty"
    group: "root"
    mode: "0644"
-  when: item['url'] is not defined
+  when: 
+   - item['url'] is not defined
+   - item['file'] is defined
   with_items: "{{ idp_metadata_providers }}"
 
 # IP access control to status page. Required by haproxy
