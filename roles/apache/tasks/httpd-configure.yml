@@ -116,3 +116,4 @@
    - apache is defined
    - apache['web_gui_user'] is defined and apache['web_gui_user'] != ""
    - apache['web_gui_pw'] is defined and apache['web_gui_pw'] != ""
+  tags: change_web_gui_pw
