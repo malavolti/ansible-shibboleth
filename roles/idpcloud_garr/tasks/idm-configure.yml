@@ -255,7 +255,7 @@
     insertbefore: "</VirtualHost>"
     block: |
       Include conf-available/idm-tools.conf
-  when: idm_tools_apache.stat.islnk is defined
+  when: idm_tools_apache.stat.islnk is not defined
   notify:
    - "Restart Apache"
 
